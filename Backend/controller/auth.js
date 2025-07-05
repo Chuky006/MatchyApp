@@ -16,7 +16,7 @@ const salt = 10
     const existUser = await AuthModel.findOne({email});
 
     if (existUser){
-        return res.status(400).json({message:"User aleady exists"});
+        return res.status(400).json({message:"User already exists"});
     }
 
     //hash password

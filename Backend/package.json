@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "nodemon index.js"
   },
   "author": "Ochuko Sowho",
@@ -21,5 +21,11 @@
     "mongoose": "^8.16.1",
     "nodemailer": "^7.0.4",
     "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.28.0",
+    "babel-jest": "^30.0.4",
+    "jest": "^30.0.4",
+    "supertest": "^7.1.1"
   }
 }

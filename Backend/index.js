@@ -1,16 +1,17 @@
+import app from "./app.js";
 import express from 'express';
 import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import connectDb from "./config/mongodb.js";
-import AuthRoutes from "./routes/AuthRoutes.js";
+import AuthRoutes from "./routes/authRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import cookieParser from "cookie-parser";
 import mentorshipRoutes from "./routes/mentorshipRoutes.js";
 import availabilityRoutes from "./routes/availabilityRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
-import errorHandler from "./Middleware/errorHandler.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 
 
@@ -54,3 +55,5 @@ connectDb();
 app.listen(port, ()=>{
     console.log("Server is running");
 })
+
+export default app; 
