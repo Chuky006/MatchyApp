@@ -13,9 +13,11 @@ const authSchema = new mongoose.Schema({
   skills: { type: [String], default: [] },
   goals: { type: [String], default: [] }
   
-}, {timestamps:true},
-   {minimize:false},
-)
+}, {
+    timestamps: true,
+    minimize: false 
+  }
+);
 
 const AuthModel = mongoose.model.users || mongoose.model("users", authSchema);
 

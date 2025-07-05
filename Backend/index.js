@@ -6,6 +6,15 @@ import connectDb from "./config/mongodb.js";
 import AuthRoutes from "./routes/AuthRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import cookieParser from "cookie-parser";
+import mentorshipRoutes from "./routes/mentorshipRoutes.js";
+import availabilityRoutes from "./routes/availabilityRoutes.js";
+import sessionRoutes from "./routes/sessionRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+
+
+
+
+
 
 dotenv.config();
 
@@ -16,10 +25,14 @@ app.use(express.json());
 app.use(cookieParser())
 
 app.use("/api/auth", AuthRoutes)
-
 app.use("/api/profile", profileRoutes)
-
 //connecting to database
+
+app.use("/api/requests", mentorshipRoutes);
+app.use("/api/availability", availabilityRoutes);
+app.use("/api/sessions", sessionRoutes);
+app.use("/api/admin", adminRoutes);
+
 
 //test API
 app.get("/", (req, res) =>{
