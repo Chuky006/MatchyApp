@@ -1,5 +1,6 @@
 import SessionModel from "../models/sessionSchema.js";
 import AuthModel from "../models/authSchema.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 //  Mentee books a session with a mentor
 const bookSession = async (req, res) => {
@@ -32,6 +33,28 @@ const bookSession = async (req, res) => {
     });
 
     await newSession.save();
+
+    // Fetch mentor and mentee details to send mails
+const mentee = await AuthModel.findById(menteeId);
+
+
+// Format readable time
+const formattedDate = new Date(date).toLocaleDateString();
+const formattedTime = time;
+
+// Send email to mentor
+await sendEmail({
+  to: mentor.email,
+  subject: "New Mentorship Session Booked",
+  text: `Hi ${mentor.name},\n\nYou have a new session booked by ${mentee.name} on ${formattedDate} at ${formattedTime}.\n\nPlease prepare accordingly.\n\n– Matchy App`,
+});
+
+// Send email to mentee
+await sendEmail({
+  to: mentee.email,
+  subject: "Mentorship Session Confirmation",
+  text: `Hi ${mentee.name},\n\nYour session with ${mentor.name} is scheduled for ${formattedDate} at ${formattedTime}.\n\nThank you for using Matchy!\n\n– Matchy App`,
+});
 
     res.status(201).json({ message: "Session booked successfully", session: newSession });
   } catch (error) {
