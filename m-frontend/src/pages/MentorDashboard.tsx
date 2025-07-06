@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../services/axios.ts";
+;
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
 import Topbar from "../components/Topbar";

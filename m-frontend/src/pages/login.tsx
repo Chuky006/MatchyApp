@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { AxiosError } from "axios";
-import axios from "axios";
+import axios from "../services/axios.ts";
 
 const Login = () => {
   const { setUser } = useAuth();
