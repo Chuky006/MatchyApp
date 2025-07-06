@@ -17,7 +17,7 @@ const MentorProfile = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
+      await axios.post(
         "/api/profile",
         {
           bio,
@@ -29,7 +29,6 @@ const MentorProfile = () => {
 
       setSuccess("Profile created successfully!");
       setError("");
-      
       navigate("/mentor/dashboard");
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
