@@ -1,6 +1,7 @@
 import { useState } from "react";
-import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
+import axiosInstance from "../services/axios"; // ✅ custom instance
 
 const Register = () => {
   const navigate = useNavigate();
@@ -23,10 +24,8 @@ const Register = () => {
     setError("");
 
     try {
-      await axios.post("/api/auth/register", formData, { withCredentials: true });
-
-      // Redirect to login on success
-      navigate("/login");
+      await axiosInstance.post("/auth/register", formData); // ✅ no double `/api`
+      navigate("/login"); // Redirect on success
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       setError(error?.response?.data?.message || "Registration failed");

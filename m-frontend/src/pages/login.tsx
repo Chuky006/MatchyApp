@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { AxiosError } from "axios";
-import axios from "../services/axios.ts";
+import axiosInstance from "../services/axios"; // ✅ fixed import
 
 const Login = () => {
   const { setUser } = useAuth();
@@ -13,12 +13,12 @@ const Login = () => {
   const [error, setError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault(); // prevent page refresh
+    e.preventDefault();
 
     try {
-      const res = await axios.post("/api/auth/login", { email, password }, { withCredentials: true });
+      const res = await axiosInstance.post("/auth/login", { email, password }); // ✅ fixed double `/api`
       const { user } = res.data;
-      console.log("Login successful:", user);
+      console.log("✅ Login successful:", user);
 
       setUser(user);
 
@@ -37,7 +37,7 @@ const Login = () => {
       }
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
-      console.error("Login error:", error?.response?.data || error.message);
+      console.error("❌ Login error:", error?.response?.data || error.message);
       setError(error?.response?.data?.message || "Login failed");
     }
   };
@@ -52,6 +52,7 @@ const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           className="w-full p-2 border rounded"
+          required
         />
         <input
           type="password"
@@ -59,6 +60,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           className="w-full p-2 border rounded"
+          required
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
