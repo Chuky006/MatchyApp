@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 // import routes
-import AuthRoutes from "./routes/authRoutes.js";
+import AuthRoutes from "./routes/AuthRoutes.js";
 import ProfileRoutes from "./routes/profileRoutes.js";
 // import other routes here...
 
