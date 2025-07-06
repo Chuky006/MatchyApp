@@ -9,11 +9,15 @@ import PrivateRoute from "./routes/PrivateRoute";
 import MenteeMentorList from "./pages/MenteeMentorList";
 import EditProfile from "./pages/EditProfile";
 import MenteeProfile from "./pages/MenteeProfile";
+import Home from "./pages/Home"; // ✅ Add this import
 
 const App = () => {
   return (
     <Router>
       <Routes>
+        {/* Home Page */}
+        <Route path="/" element={<Home />} />
+
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -68,10 +72,10 @@ const App = () => {
           }
         />
         <Route
-         path="/mentee/profile"
-         element={
+          path="/mentee/profile"
+          element={
             <PrivateRoute allowedRoles={["mentee"]}>
-             <MenteeProfile />
+              <MenteeProfile />
             </PrivateRoute>
           }
         />
