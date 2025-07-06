@@ -8,12 +8,12 @@ const getAllUsers = async (req, res) => {
     const users = await AuthModel.find().select("-password");
     res.status(200).json({ users });
   } catch (error) {
-    console.log(error);
+    console.error("Get users error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// GET all mentorship requests (matches)
+// GET all mentorship requests
 const getAllRequests = async (req, res) => {
   try {
     const requests = await MentorshipRequestModel.find()
@@ -23,7 +23,7 @@ const getAllRequests = async (req, res) => {
 
     res.status(200).json({ requests });
   } catch (error) {
-    console.log(error);
+    console.error("Get requests error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -38,16 +38,17 @@ const getAllSessions = async (req, res) => {
 
     res.status(200).json({ sessions });
   } catch (error) {
-    console.log(error);
+    console.error("Get sessions error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// POST assign mentor to mentee
-const manuallyAssignMentor = async (req, res) => {
+// POST /api/admin/assign - Assign mentor to mentee manually
+const assignMentorToMentee = async (req, res) => {
   try {
     const { mentorId, menteeId, message } = req.body;
 
+    // Validate mentor and mentee
     const mentor = await AuthModel.findById(mentorId);
     const mentee = await AuthModel.findById(menteeId);
 
@@ -59,24 +60,30 @@ const manuallyAssignMentor = async (req, res) => {
       return res.status(404).json({ message: "Mentee not found or invalid role" });
     }
 
+    // Prevent duplicate assignment
     const existing = await MentorshipRequestModel.findOne({ mentor: mentorId, mentee: menteeId });
     if (existing) {
-      return res.status(400).json({ message: "A request already exists between these users" });
+      return res.status(400).json({ message: "Request already exists between these users" });
     }
 
-    const request = new MentorshipRequestModel({
+    // Save the request
+    const request = await MentorshipRequestModel.create({
       mentor: mentorId,
       mentee: menteeId,
-      message,
-      status: "accepted",
+      message: message || "Assigned by admin",
+      status: "assigned-by-admin",
     });
 
-    await request.save();
     res.status(201).json({ message: "Mentor assigned successfully", request });
   } catch (error) {
-    console.log(error);
+    console.error("Assign error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-export { getAllUsers, getAllRequests, getAllSessions, manuallyAssignMentor };
+export {
+  getAllUsers,
+  getAllRequests,
+  getAllSessions,
+  assignMentorToMentee, 
+};

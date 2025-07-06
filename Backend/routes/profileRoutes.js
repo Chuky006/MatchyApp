@@ -2,6 +2,8 @@ import express from "express";
 import { users, editProfile } from "../controller/profile.js";
 import { getMyProfile, updateMyProfile } from "../controller/profileController.js";
 import { authMiddleware } from "../Middleware/authMiddleware.js";
+import { getMentorProfiles } from "../controller/profile.js";
+
 
 const profileRoutes = express.Router();
 
@@ -16,5 +18,7 @@ profileRoutes.get("/me", authMiddleware, getMyProfile);
 
 //New: Authenticated user edit own profile
 profileRoutes.put("/me", authMiddleware, updateMyProfile);
+
+profileRoutes.get("/mentors", authMiddleware, getMentorProfiles);
 
 export default profileRoutes;

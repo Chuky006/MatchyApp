@@ -77,7 +77,15 @@ const salt = 10
             })
 
             //sends output to frontend
-            return res.status(200).json({message: "Login Successful", user:{id: user._id}, name: user.name, email: user.email, role: user.role});
+            return res.status(200).json({
+                 message: "Login Successful",
+                 user: {
+                 id: user._id,
+                 name: user.name,
+                 email: user.email,
+                 role: user.role,
+  },
+});
 
         }catch(error){
             console.log(error)

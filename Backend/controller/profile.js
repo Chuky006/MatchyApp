@@ -1,6 +1,23 @@
 import AuthModel from "../models/authSchema.js";
 import jwt from "jsonwebtoken";
 
+
+// ✅ Get all mentor profiles
+const getMentorProfiles = async (req, res) => {
+  try {
+    const mentors = await AuthModel.find({ role: "mentor" }).select("name email role");
+
+    if (!mentors || mentors.length === 0) {
+      return res.status(404).json({ message: "No mentors found" });
+    }
+
+    return res.status(200).json({ mentors });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 const users = async (req, res)=> {
 try{
     const {id} = req.params;
@@ -44,4 +61,4 @@ const editProfile = async(req, res) => {
 
 }
 
-export {users, editProfile};
+export {users, editProfile, getMentorProfiles};
