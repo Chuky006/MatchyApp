@@ -1,7 +1,7 @@
 import express from "express";
 import { users, editProfile } from "../controller/profile.js";
 import { getMyProfile, updateMyProfile } from "../controller/profileController.js";
-import { authMiddleware } from "../Middleware/authMiddleware.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 import { getMentorProfiles } from "../controller/profile.js";
 
 
