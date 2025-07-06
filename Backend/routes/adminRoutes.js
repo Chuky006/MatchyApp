@@ -5,8 +5,8 @@ import {
   getAllSessions,
   assignMentorToMentee, 
 } from "../controller/adminController.js";
-import { authMiddleware } from "../Middleware/authMiddleware.js";
-import { requireAdmin } from "../Middleware/requireAdmin.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
+import { requireAdmin } from "../middleware/requireAdmin.js";
 
 const router = express.Router();
 
