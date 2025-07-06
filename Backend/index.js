@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import connectDb from "./config/mongodb.js";
-import AuthRoutes from "./routes/authRoutes.js";
+import AuthRoutes from "./routes/AuthRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import cookieParser from "cookie-parser";
 import mentorshipRoutes from "./routes/mentorshipRoutes.js";
