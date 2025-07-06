@@ -46,8 +46,8 @@ const MenteeDashboard = () => {
           setLoading(false);
         }
       } catch (err) {
-        const error = err as AxiosError;
-        console.error("⚠️ Mentee profile check failed:", error);
+        const axiosError = err as AxiosError;
+        console.error("⚠️ Mentee profile check failed:", axiosError);
         navigate("/mentee/profile");
       }
     };
@@ -71,7 +71,8 @@ const MenteeDashboard = () => {
           setSessions(res.data.sessions);
         }
       } catch (err) {
-        console.error("❌ Fetch failed", err);
+        const axiosError = err as AxiosError;
+        console.error("❌ Fetch failed", axiosError);
         setError("Failed to load data.");
       }
     };
@@ -89,6 +90,8 @@ const MenteeDashboard = () => {
       alert("✅ Feedback submitted!");
       location.reload(); // or re-fetch sessions
     } catch (err) {
+      const axiosError = err as AxiosError;
+      console.error("❌ Feedback submission failed", axiosError);
       alert("❌ Failed to submit feedback.");
     }
   };
