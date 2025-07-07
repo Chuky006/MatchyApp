@@ -67,5 +67,6 @@ app.use(errorHandler);
 // ✅ Connect DB and Start Server
 connectDb();
 app.listen(port, () => {
+  console.log("🛠️ Triggering redeploy for profile route");
   console.log(`✅ Server running on port ${port}`);
 });
