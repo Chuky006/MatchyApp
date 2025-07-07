@@ -22,3 +22,5 @@ profileRoutes.put("/me", authMiddleware, updateMyProfile);
 profileRoutes.get("/mentors", authMiddleware, getMentorProfiles);
 
 export default profileRoutes;
+
+//Triggering redeploy for updated profile routes
