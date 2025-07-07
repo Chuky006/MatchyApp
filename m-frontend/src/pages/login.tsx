@@ -16,7 +16,11 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axiosInstance.post("/auth/login", { email, password });
+      const res = await axiosInstance.post(
+        "/auth/login",
+        { email, password },
+        { withCredentials: true } // ✅ Necessary to receive token cookie
+      );
       const { user } = res.data;
 
       console.log("✅ Login successful:", user);

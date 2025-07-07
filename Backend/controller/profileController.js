@@ -9,7 +9,7 @@ const getMyProfile = async (req, res) => {
     }
     res.status(200).json({ profile: user });
   } catch (error) {
-    console.log(error);
+    console.error("❌ Error in getMyProfile:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -24,20 +24,30 @@ const updateMyProfile = async (req, res) => {
 
     const { name, email, bio, skills, goals } = req.body;
 
-    user.name = name || user.name;
-    user.email = email || user.email;
-    user.bio = bio || user.bio;
-    user.skills = skills || user.skills;
-    user.goals = goals || user.goals;
+    if (name !== undefined) user.name = name;
+    if (email !== undefined) user.email = email;
+    if (bio !== undefined) user.bio = bio;
+    if (skills !== undefined) user.skills = Array.isArray(skills) ? skills : [];
+    if (goals !== undefined) user.goals = goals;
 
     await user.save();
 
-    res.status(200).json({ message: "Profile updated successfully" });
+    res.status(200).json({
+      message: "Profile updated successfully",
+      profile: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        bio: user.bio,
+        skills: user.skills,
+        goals: user.goals,
+      },
+    });
   } catch (error) {
-    console.log(error);
+    console.error("❌ Error in updateMyProfile:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// ✅ Export them here
 export { getMyProfile, updateMyProfile };
