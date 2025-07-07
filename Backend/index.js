@@ -21,6 +21,7 @@ const port = process.env.PORT || 5000;
 // ✅ Allowed Origins for CORS
 const allowedOrigins = [
   "https://matchy-app.vercel.app",
+  "https://matchy-koadan134-ochukos-projects-dc4d2fef.vercel.app",
   "http://localhost:5173",
 ];
 
