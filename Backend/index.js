@@ -18,10 +18,12 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // CORS config
-const allowedOrigins = [
-  "https://matchy-app.vercel.app",
-  "http://localhost:5173"
-];
+app.use(
+  cors({
+    origin: ["https://matchy-app.vercel.app", "http://localhost:5173"],
+    credentials: true,
+  })
+);
 
 app.use(
   cors({
