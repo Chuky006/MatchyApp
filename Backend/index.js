@@ -17,14 +17,13 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// CORS config
-app.use(
-  cors({
-    origin: ["https://matchy-app.vercel.app", "http://localhost:5173"],
-    credentials: true,
-  })
-);
+// ✅ Define allowed origins
+const allowedOrigins = [
+  "https://matchy-app.vercel.app",
+  "http://localhost:5173",
+];
 
+// ✅ Apply CORS middleware
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -67,7 +66,7 @@ app.use(errorHandler);
 // Connect to DB and start server
 connectDb();
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`✅ Server running on port ${port}`);
 });
 
 export default app;

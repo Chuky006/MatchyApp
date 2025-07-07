@@ -1,2 +1,48 @@
-node_modules
+# === General ===
+.DS_Store
+Thumbs.db
+
+# === Node.js ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === Environment files ===
 .env
+**/.env
+
+# === Logs ===
+logs
+*.log
+log/
+*.pid
+
+# === Vite (frontend build) ===
+m-frontend/dist/
+m-frontend/.vite
+
+# === Vercel build cache ===
+.vercel
+
+# === VS Code ===
+.vscode/
+
+# === OS specific ===
+*.swp
+
+# === Build artifacts ===
+build/
+dist/
+
+# === Tests ===
+coverage/
+
+# === Backend ===
+Backend/node_modules/
+Backend/dist/
+Backend/.env
+
+# === Frontend ===
+m-frontend/node_modules/
+m-frontend/.env

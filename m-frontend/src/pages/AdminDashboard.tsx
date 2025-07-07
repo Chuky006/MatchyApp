@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "../services/axios.ts";
-;
+import axios from "../services/axios";
 import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
 

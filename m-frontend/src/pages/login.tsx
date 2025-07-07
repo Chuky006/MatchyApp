@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { AxiosError } from "axios";
-import axiosInstance from "../services/axios"; // ✅ fixed import
+import axiosInstance from "../services/axios"; // ✅ use your configured axios instance
 
 const Login = () => {
   const { setUser } = useAuth();
@@ -16,12 +16,13 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axiosInstance.post("/auth/login", { email, password }); // ✅ fixed double `/api`
+      const res = await axiosInstance.post("/auth/login", { email, password });
       const { user } = res.data;
-      console.log("✅ Login successful:", user);
 
+      console.log("✅ Login successful:", user);
       setUser(user);
 
+      // Redirect based on role
       switch (user.role) {
         case "admin":
           navigate("/admin/dashboard");
