@@ -6,7 +6,7 @@ let menteeToken;
 let mentorId;
 
 beforeAll(async () => {
-  // Log in as mentee
+  
   const res = await request(app).post("/api/auth/login").send({
     email: "janedoe@example.com",
     password: "password123"
@@ -14,7 +14,7 @@ beforeAll(async () => {
 
   menteeToken = res.headers["set-cookie"][0].split(";")[0].split("=")[1];
 
-  // Get a sample mentor (assumes one exists in DB)
+  
   const mentors = await request(app)
     .get("/api/admin/users")
     .set("Cookie", [`token=${menteeToken}`]);
@@ -33,7 +33,7 @@ describe("Mentorship Requests", () => {
         message: "I’d like to learn from you"
       });
 
-    expect([201, 400]).toContain(res.statusCode); // 400 if already exists
+    expect([201, 400]).toContain(res.statusCode);
   });
 
   it("should return sent requests", async () => {

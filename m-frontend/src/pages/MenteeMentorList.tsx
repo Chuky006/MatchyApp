@@ -21,7 +21,7 @@ const MenteeMentorList = () => {
     const fetchMentors = async () => {
       try {
         const res = await axios.get("/api/profile/mentors", { withCredentials: true });
-        setMentors(res.data.mentors); // assuming backend sends { mentors: [] }
+        setMentors(res.data.mentors); //assuming backend sends { mentors: [] }
       } catch (err) {
         const error = err as AxiosError;
         console.error(error);
@@ -40,7 +40,7 @@ const MenteeMentorList = () => {
         { withCredentials: true }
       );
       alert("Mentorship request sent!");
-      navigate("/mentee/dashboard"); // ✅ Option 1: Redirect to dashboard
+      navigate("/mentee/dashboard"); //Redirect to dashboard
     } catch (err) {
       const error = err as AxiosError;
       console.error(error);

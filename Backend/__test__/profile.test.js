@@ -1,9 +1,8 @@
-//get user profile after login
 
 import request from "supertest";
 import app from "../app.js";
 
-let cookie; // to store the extracted cookie for future requests
+let cookie; 
 
 beforeAll(async () => {
   await request(app).post("/api/auth/register").send({
@@ -20,7 +19,7 @@ beforeAll(async () => {
   expect(res.statusCode).toBe(200);
   expect(res.headers["set-cookie"]).toBeDefined();
 
-  cookie = res.headers["set-cookie"][0].split(";")[0]; // e.g., "token=abc123"
+  cookie = res.headers["set-cookie"][0].split(";")[0]; 
 });
 
 describe("Profile", () => {

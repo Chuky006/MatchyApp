@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true); // 👈 Add this
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -17,14 +17,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(null);
         console.log("No user found");
       } finally {
-        setLoading(false); // 👈 Done fetching
+        setLoading(false); //Done fetching
       }
     };
 
     fetchCurrentUser();
   }, []);
 
-  // 👇 Only render app after fetch is complete
+  //Only render app after fetch is complete
   if (loading) {
     return <div className="text-center mt-10">Loading...</div>;
   }

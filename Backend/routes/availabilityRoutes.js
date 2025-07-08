@@ -4,10 +4,10 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Mentor sets availability
+//Mentor sets availability
 router.post("/", authMiddleware, setAvailability);
 
-// Anyone can view a mentor’s availability
+//Anyone can view a mentor’s availability
 router.get("/:mentorId", getMentorAvailability);
 
 export default router;

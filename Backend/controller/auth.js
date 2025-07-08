@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-// ✅ User Registration
+//User Registration
 const register = async (req, res) => {
   const salt = 10;
   try {
@@ -56,7 +56,7 @@ const register = async (req, res) => {
   }
 };
 
-// ✅ User Login
+//User Login
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -101,7 +101,7 @@ const login = async (req, res) => {
   }
 };
 
-// ✅ User Logout
+//User Logout
 const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
@@ -116,7 +116,7 @@ const logout = async (req, res) => {
   }
 };
 
-// ✅ Get Single User by ID
+//Get Single User by ID
 const users = async (req, res) => {
   try {
     const { id } = req.params;
@@ -131,7 +131,7 @@ const users = async (req, res) => {
   }
 };
 
-// ✅ Get Currently Logged-in User
+//Get Currently Logged-in User
 const getCurrentUser = async (req, res) => {
   try {
     const user = req.user;

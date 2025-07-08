@@ -2,24 +2,24 @@ import SessionModel from "../models/sessionSchema.js";
 import AuthModel from "../models/authSchema.js";
 import { sendEmail } from "../utils/sendEmail.js";
 
-//  Mentee books a session with a mentor
+//Mentee books a session with a mentor
 const bookSession = async (req, res) => {
   try {
     const menteeId = req.user._id;
     const { mentorId, date, time } = req.body;
 
-    // Validate required fields
+    //Validate required fields
     if (!mentorId || !date || !time) {
       return res.status(400).json({ message: "All fields are required: mentorId, date, time" });
     }
 
-    // Check if mentor exists
+    //Check if mentor exists
     const mentor = await AuthModel.findById(mentorId);
     if (!mentor || mentor.role !== "mentor") {
       return res.status(404).json({ message: "Mentor not found" });
     }
 
-    // Check if mentor is already booked at that date and time
+    //Check if mentor is already booked at that date and time
     const existing = await SessionModel.findOne({ mentor: mentorId, date, time });
     if (existing) {
       return res.status(400).json({ message: "This time slot is already booked" });
@@ -34,22 +34,22 @@ const bookSession = async (req, res) => {
 
     await newSession.save();
 
-    // Fetch mentor and mentee details to send mails
+    //Fetch mentor and mentee details to send mails
 const mentee = await AuthModel.findById(menteeId);
 
 
-// Format readable time
+//Format readable time
 const formattedDate = new Date(date).toLocaleDateString();
 const formattedTime = time;
 
-// Send email to mentor
+//Send email to mentor
 await sendEmail({
   to: mentor.email,
   subject: "New Mentorship Session Booked",
   text: `Hi ${mentor.name},\n\nYou have a new session booked by ${mentee.name} on ${formattedDate} at ${formattedTime}.\n\nPlease prepare accordingly.\n\n– Matchy App`,
 });
 
-// Send email to mentee
+//Send email to mentee
 await sendEmail({
   to: mentee.email,
   subject: "Mentorship Session Confirmation",

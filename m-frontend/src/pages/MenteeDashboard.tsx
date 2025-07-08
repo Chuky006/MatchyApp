@@ -29,7 +29,7 @@ const MenteeDashboard = () => {
   const [error, setError] = useState("");
   const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
 
-  // Check profile completeness
+  //Check profile completeness
   useEffect(() => {
     const checkProfile = async () => {
       try {
@@ -59,7 +59,7 @@ const MenteeDashboard = () => {
     }
   }, [user, navigate]);
 
-  // Load data based on tab
+  //Load data based on tab
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,7 +88,7 @@ const MenteeDashboard = () => {
         { withCredentials: true }
       );
       alert("✅ Feedback submitted!");
-      location.reload(); // or re-fetch sessions
+      location.reload(); //or re-fetch sessions
     } catch (err) {
       const axiosError = err as AxiosError;
       console.error("❌ Feedback submission failed", axiosError);

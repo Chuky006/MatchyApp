@@ -1,6 +1,6 @@
 import AuthModel from "../models/authSchema.js";
 
-// ✅ GET /api/profile/me
+//GET /api/profile/me
 const getMyProfile = async (req, res) => {
   try {
     const user = await AuthModel.findById(req.user._id).select("-password");
@@ -14,7 +14,7 @@ const getMyProfile = async (req, res) => {
   }
 };
 
-// ✅ PUT /api/profile/me
+//PUT /api/profile/me
 const updateMyProfile = async (req, res) => {
   try {
     const fieldsToUpdate = {};

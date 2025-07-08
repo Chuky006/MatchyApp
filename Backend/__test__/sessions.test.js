@@ -6,7 +6,7 @@ let menteeToken;
 let mentorId;
 
 beforeAll(async () => {
-  // Log in as mentee
+
   const res = await request(app).post("/api/auth/login").send({
     email: "janedoe@example.com",
     password: "password123"
@@ -33,7 +33,7 @@ describe("Mentorship Sessions", () => {
         time: "14:00"
       });
 
-    expect([201, 400]).toContain(res.statusCode); // 400 if already booked
+    expect([201, 400]).toContain(res.statusCode);
   });
 
   it("should get upcoming sessions", async () => {

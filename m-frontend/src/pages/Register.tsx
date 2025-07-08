@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
-import axiosInstance from "../services/axios"; // ✅ custom instance
+import axiosInstance from "../services/axios";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    role: "mentee", // default role
+    role: "mentee", //default role
   });
 
   const [error, setError] = useState("");
@@ -25,8 +25,8 @@ const Register = () => {
     setError("");
 
     try {
-      await axiosInstance.post("/auth/register", formData); // ✅ no double `/api`
-      navigate("/login"); // Redirect on success
+      await axiosInstance.post("/auth/register", formData); //no double `/api`
+      navigate("/login"); //Redirect on success
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       setError(error?.response?.data?.message || "Registration failed");

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { AxiosError } from "axios";
-import axiosInstance from "../services/axios"; // ✅ use your configured axios instance
+import axiosInstance from "../services/axios";
 
 const Login = () => {
   const { setUser } = useAuth();
@@ -19,14 +19,14 @@ const Login = () => {
       const res = await axiosInstance.post(
         "/auth/login",
         { email, password },
-        { withCredentials: true } // ✅ Necessary to receive token cookie
+        { withCredentials: true }
       );
       const { user } = res.data;
 
-      console.log("✅ Login successful:", user);
+      console.log("Login successful:", user);
       setUser(user);
 
-      // Redirect based on role
+      //Redirect based on role
       switch (user.role) {
         case "admin":
           navigate("/admin/dashboard");

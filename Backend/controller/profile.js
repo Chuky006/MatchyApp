@@ -2,7 +2,7 @@ import AuthModel from "../models/authSchema.js";
 import jwt from "jsonwebtoken";
 
 
-// ✅ Get all mentor profiles
+//Get all mentor profiles
 const getMentorProfiles = async (req, res) => {
   try {
     const mentors = await AuthModel.find({ role: "mentor" }).select("name email role");

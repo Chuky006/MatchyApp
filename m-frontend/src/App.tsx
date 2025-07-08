@@ -9,7 +9,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import MenteeMentorList from "./pages/MenteeMentorList";
 import EditProfile from "./pages/EditProfile";
 import MenteeProfile from "./pages/MenteeProfile";
-import Home from "./pages/Home"; // ✅ Add this import
+import Home from "./pages/Home";
 
 const App = () => {
   return (

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react"; // Install lucide-react for icons
+import { Menu, X } from "lucide-react"; //lucide-react for icons
 
 interface SidebarLink {
   label: string;
@@ -39,7 +39,7 @@ const Sidebar = ({ links }: { links: SidebarLink[] }) => {
               key={link.label}
               onClick={() => {
                 if (link.onClick) link.onClick();
-                setIsOpen(false); // close menu on mobile after click
+                setIsOpen(false); //close menu on mobile after click
               }}
               className={`text-left px-4 py-2 rounded hover:bg-gray-700 w-full ${
                 location.pathname === link.path ? "bg-gray-700" : ""

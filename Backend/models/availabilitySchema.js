@@ -4,8 +4,8 @@ const availabilitySchema = new mongoose.Schema(
   {
     mentor: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true },
     day: { type: String, enum: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] },
-    from: { type: String }, // e.g. "15:00"
-    to: { type: String },   // e.g. "17:00"
+    from: { type: String },
+    to: { type: String },
   },
   { timestamps: true }
 );
