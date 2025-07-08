@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../services/axios"; // ✅ Use axiosInstance
 
 const Topbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await axios.post("/api/auth/logout");
+      await axios.post("/auth/logout"); // baseURL already configured
       localStorage.removeItem("token");
       navigate("/login");
     } catch (error) {

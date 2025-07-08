@@ -13,18 +13,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const res = await axios.get("/api/auth/me", { withCredentials: true });
         setUser(res.data);
         console.log("✅ Fetched user:", res.data);
-      } catch (error) {
+      } catch {
         setUser(null);
         console.log("No user found");
       } finally {
-        setLoading(false); //Done fetching
+        setLoading(false); // Done fetching
       }
     };
 
     fetchCurrentUser();
   }, []);
 
-  //Only render app after fetch is complete
   if (loading) {
     return <div className="text-center mt-10">Loading...</div>;
   }

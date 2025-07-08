@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "../services/axios";
+import axiosInstance from "../services/axios";
 import { useAuth } from "../context/useAuth";
 
 //Hook for mentees
@@ -11,7 +11,7 @@ export const useMenteeProfileCheck = () => {
   useEffect(() => {
     const checkMenteeProfile = async () => {
       try {
-        const res = await axios.get("/api/profile/me", { withCredentials: true });
+        const res = await axiosInstance.get("/profile/me");
         const profile = res.data.profile;
 
         const isBioEmpty = !profile.bio || profile.bio.trim() === "";
@@ -33,7 +33,7 @@ export const useMenteeProfileCheck = () => {
   }, [user, navigate]);
 };
 
-//Hook for mentors
+// Hook for mentors
 export const useMentorProfileCheck = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ export const useMentorProfileCheck = () => {
   useEffect(() => {
     const checkMentorProfile = async () => {
       try {
-        const res = await axios.get("/api/profile/me", { withCredentials: true });
+        const res = await axiosInstance.get("/profile/me");
         const profile = res.data.profile;
 
         const isBioEmpty = !profile.bio || profile.bio.trim() === "";

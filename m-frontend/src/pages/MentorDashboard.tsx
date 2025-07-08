@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "../services/axios";
+import axios from "../services/axios"; 
 import { useAuth } from "../context/useAuth";
 import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
@@ -27,17 +27,17 @@ const MentorDashboard = () => {
   const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
   const [tab, setTab] = useState<"requests" | "sessions" | "feedback">("requests");
 
-  useMentorProfileCheck(); 
+  useMentorProfileCheck();
 
   useEffect(() => {
     if (user?.role === "mentor") {
       axios
-        .get("/api/requests/received", { withCredentials: true })
+        .get("/requests/received")
         .then((res) => setRequests(res.data.requests))
         .catch(() => console.error("Failed to load requests"));
 
       axios
-        .get("/api/sessions", { withCredentials: true })
+        .get("/sessions")
         .then((res) => setSessions(res.data.sessions))
         .catch(() => console.error("Failed to load sessions"));
 
@@ -47,11 +47,9 @@ const MentorDashboard = () => {
 
   const handleFeedbackSubmit = async (sessionId: string) => {
     try {
-      await axios.put(
-        `/api/sessions/${sessionId}/mentor-feedback`,
-        { feedback: feedbackMap[sessionId] },
-        { withCredentials: true }
-      );
+      await axios.put(`/sessions/${sessionId}/mentor-feedback`, {
+        feedback: feedbackMap[sessionId],
+      });
       alert("Feedback submitted!");
       location.reload();
     } catch {
@@ -61,11 +59,7 @@ const MentorDashboard = () => {
 
   const updateRequestStatus = async (requestId: string, status: string) => {
     try {
-      await axios.put(
-        `/api/requests/${requestId}`,
-        { status },
-        { withCredentials: true }
-      );
+      await axios.put(`/requests/${requestId}`, { status });
       setRequests((prev) =>
         prev.map((r) => (r._id === requestId ? { ...r, status } : r))
       );

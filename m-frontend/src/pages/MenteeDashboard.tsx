@@ -30,15 +30,14 @@ const MenteeDashboard = () => {
 
   useMenteeProfileCheck(); //Ensures profile is complete before proceeding
 
-  //Load data when tab changes
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (tab === "requests") {
-          const res = await axios.get("/api/requests/sent", { withCredentials: true });
+          const res = await axios.get("/requests/sent");
           setRequests(res.data.requests);
         } else if (tab === "sessions") {
-          const res = await axios.get("/api/sessions", { withCredentials: true });
+          const res = await axios.get("/sessions");
           setSessions(res.data.sessions);
         }
       } catch (err) {
@@ -53,13 +52,11 @@ const MenteeDashboard = () => {
 
   const handleFeedbackSubmit = async (sessionId: string) => {
     try {
-      await axios.put(
-        `/api/sessions/${sessionId}/mentee-feedback`,
-        { feedback: feedbackMap[sessionId] },
-        { withCredentials: true }
-      );
+      await axios.put(`/sessions/${sessionId}/mentee-feedback`, {
+        feedback: feedbackMap[sessionId],
+      });
       alert("✅ Feedback submitted!");
-      location.reload(); // Optional: refetch sessions instead of reloading
+      location.reload();
     } catch (err) {
       const axiosError = err as AxiosError;
       console.error("❌ Feedback submission failed", axiosError);
@@ -77,13 +74,17 @@ const MenteeDashboard = () => {
 
         <div className="flex justify-center gap-4 mb-6">
           <button
-            className={`px-4 py-2 rounded ${tab === "requests" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+            className={`px-4 py-2 rounded ${
+              tab === "requests" ? "bg-blue-600 text-white" : "bg-gray-200"
+            }`}
             onClick={() => setTab("requests")}
           >
             My Requests
           </button>
           <button
-            className={`px-4 py-2 rounded ${tab === "sessions" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+            className={`px-4 py-2 rounded ${
+              tab === "sessions" ? "bg-blue-600 text-white" : "bg-gray-200"
+            }`}
             onClick={() => setTab("sessions")}
           >
             My Sessions
@@ -111,7 +112,9 @@ const MenteeDashboard = () => {
 
         {tab === "sessions" && (
           <div>
-            <h2 className="text-xl font-semibold mb-2">Upcoming or Completed Sessions</h2>
+            <h2 className="text-xl font-semibold mb-2">
+              Upcoming or Completed Sessions
+            </h2>
             {sessions.length === 0 ? (
               <p>No sessions found.</p>
             ) : (

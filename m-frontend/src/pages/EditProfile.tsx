@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import axios, { AxiosError } from "axios";
+import axiosInstance from "../services/axios";
+import { AxiosError } from "axios"; 
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -22,10 +23,7 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("/api/profile/me", {
-          withCredentials: true,
-        });
-
+        const res = await axiosInstance.get("/profile/me");
         const profile = res.data.profile;
 
         setForm({
@@ -60,17 +58,13 @@ const EditProfile = () => {
     setSuccess("");
 
     try {
-      await axios.put(
-        "/api/profile/me",
-        {
-          name: form.name,
-          email: form.email,
-          bio: form.bio,
-          skills: form.skills.split(",").map((s) => s.trim()),
-          goals: form.goals.split(",").map((g) => g.trim()),
-        },
-        { withCredentials: true }
-      );
+      await axiosInstance.put("/profile/me", {
+        name: form.name,
+        email: form.email,
+        bio: form.bio,
+        skills: form.skills.split(",").map((s) => s.trim()),
+        goals: form.goals.split(",").map((g) => g.trim()),
+      });
 
       setSuccess("Profile updated successfully!");
       navigate(

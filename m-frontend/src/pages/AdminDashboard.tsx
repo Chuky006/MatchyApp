@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "../services/axios";
+import axiosInstance from "../services/axios";
 import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
 
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("/api/admin/users", { withCredentials: true });
+        const res = await axiosInstance.get("/admin/users");
         setUsers(res.data.users || res.data);
       } catch {
         setError("Failed to load users");
@@ -50,7 +50,7 @@ const AdminDashboard = () => {
 
     const fetchRequests = async () => {
       try {
-        const res = await axios.get("/api/admin/requests", { withCredentials: true });
+        const res = await axiosInstance.get("/admin/requests");
         setRequests(res.data.requests || res.data);
       } catch {
         setError("Failed to load requests");
@@ -59,7 +59,7 @@ const AdminDashboard = () => {
 
     const fetchSessions = async () => {
       try {
-        const res = await axios.get("/api/admin/sessions", { withCredentials: true });
+        const res = await axiosInstance.get("/admin/sessions");
         setSessions(res.data.sessions || res.data);
       } catch {
         setError("Failed to load sessions");
@@ -81,11 +81,7 @@ const AdminDashboard = () => {
     }
 
     try {
-      await axios.post(
-        "/api/admin/assign",
-        { mentorId, menteeId },
-        { withCredentials: true }
-      );
+      await axiosInstance.post("/admin/assign", { mentorId, menteeId });
       setSuccess("Mentor assigned successfully");
       setError("");
       setMentorId("");

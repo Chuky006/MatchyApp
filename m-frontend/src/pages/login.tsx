@@ -16,17 +16,13 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axiosInstance.post(
-        "/auth/login",
-        { email, password },
-        { withCredentials: true }
-      );
+      const res = await axiosInstance.post("/auth/login", { email, password });
       const { user } = res.data;
 
       console.log("✅ Login successful:", user);
       setUser(user);
 
-      // 🔍 DEBUG: Manually call /api/profile/me after login
+      // 🔍 DEBUG: Manually call /profile/me after login
       try {
         const profileRes = await axiosInstance.get("/profile/me");
         console.log("📥 Manual /me response:", profileRes.data);
