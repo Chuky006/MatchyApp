@@ -1,69 +1,171 @@
-# React + TypeScript + Vite
+# MatchyApp 🤝
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+MatchyApp is a simple mentor-mentee matching web app built to help incubators and accelerators connect mentors with mentees. It allows mentees to find mentors, send mentorship requests, book sessions, and receive feedback. Mentors can manage requests, set availability, and leave feedback after sessions. Admins can view all users, assign mentors, and monitor the whole process.
 
-Currently, two official plugins are available:
+This project was built by me, **Ochuko**, as part of my software development journey.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🔧 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend:** React, TypeScript, TailwindCSS, Axios
+- **Backend:** Node.js, Express, TypeScript, MongoDB
+- **Authentication:** JWT (JSON Web Tokens)
+- **Email Service:** Nodemailer (Gmail used for reminders)
+- **Hosting:** Vercel (Frontend) & Render (Backend)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## ✨ Features (CRUD + More)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### ✅ Auth
+- Register & Login based on role: Mentee, Mentor, Admin
+- JWT-based secure sessions
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### ✅ Profiles (CRUD)
+- View & update profile info for mentors and mentees
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### ✅ Mentorship Requests (CRUD)
+- Mentees send mentorship requests to mentors
+- Mentors accept/reject requests
+- Admins can assign mentors manually
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### ✅ Sessions (CRUD)
+- Mentees book sessions with mentors
+- View upcoming sessions
+- Email reminders are sent to both users after booking
+
+### ✅ Feedback (CRUD)
+- Mentees give session ratings
+- Mentors write feedback after sessions
+
+### ✅ Availability (CRUD)
+- Mentors add available time slots for sessions
+
+---
+
+## 📁 Project Folder Structure
+
+MatchyApp/
+│
+├── Backend/
+│ ├── controller/
+│ ├── config/
+│ ├── middleware/
+│ ├── models/
+│ ├── routes/
+│ ├── utils/
+│ └── index.js
+│
+├── m-frontend/
+│ └── src/
+│ ├── components/
+│ ├── pages/
+│ ├── context/
+│ ├── routes/
+│ ├── services/
+│ ├── utils/
+│ └── App.tsx
+│
+├── .gitignore
+├── README.md ← you are here ✅
+
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js + npm
+- MongoDB
+- Gmail account for email service
+
+---
+
+### Installation
+
+```bash
+# Clone the repo
+git clone https://github.com/Chuky006/MatchyApp.git
+
+# Backend setup
+cd MatchyApp/Backend
+npm install
+
+# Create .env file from template
+cp .env.example .env
+# Add your environment variables (see below)
+
+npm run dev
+
+# Frontend setup (in a new terminal)
+cd ../m-frontend
+npm install
+npm run dev
+
+🔐 Backend .env Example
+Create a .env file inside the Backend folder and add:
+
+PORT=5000
+MONGO_URI=your-mongodb-uri
+JWT_SECRET=your-secret-key
+CLIENT_URL=https://matchy-app.vercel.app
+
+EMAIL_USER=your-gmail-address@gmail.com
+EMAIL_PASS=your-gmail-app-password
+
+📬 API Routes Summary
+🔑 Auth
+POST /api/auth/register – Register user
+
+POST /api/auth/login – Login user
+
+GET /api/auth/me – Get current logged-in user
+
+👤 Profile
+GET /api/profile/me – View profile
+
+PUT /api/profile/editProfile – Edit profile
+
+📩 Requests
+POST /api/requests – Send mentorship request
+
+GET /api/requests/sent – View sent requests (mentee)
+
+GET /api/requests/received – View received requests (mentor)
+
+PUT /api/requests/:id – Update request status
+
+📅 Sessions
+POST /api/sessions – Book session
+
+GET /api/sessions – View sessions
+
+PUT /api/sessions/:sessionId/mentee-feedback – Mentee submits rating
+
+PUT /api/sessions/:sessionId/mentor-feedback – Mentor submits feedback
+
+📆 Availability
+POST /api/availability – Set mentor availability
+
+GET /api/availability/:mentorId – View mentor's slots
+
+🛡 Role-Based Access
+Admin: Full control over users, sessions, and assignments
+
+Mentor: Respond to requests, manage availability, provide feedback
+
+Mentee: Request mentorship, book sessions, rate sessions
+
+💌 Email Feature
+Nodemailer is used to send automatic email reminders when a session is booked.
+
+It uses your Gmail account (via app password) securely from environment variables.
+
+📝 License
+This project is open-source under the MIT License.
+
+🙋‍♂️ Author
+Built by Ochuko
+GitHub: @Chuky006
