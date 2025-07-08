@@ -51,6 +51,7 @@ This project was built by me, **Ochuko**, as part of my software development jou
 
 ## 📁 Project Folder Structure
 
+```text
 MatchyApp/
 │
 ├── Backend/
@@ -74,7 +75,7 @@ MatchyApp/
 │
 ├── .gitignore
 ├── README.md ← you are here ✅
-
+```
 
 ---
 
