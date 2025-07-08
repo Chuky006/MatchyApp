@@ -1,9 +1,9 @@
 # MatchyApp 🤝
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Status](https://img.shields.io/badge/status-active-brightgreen)
-![Frontend](https://img.shields.io/badge/frontend-Vercel-black?logo=vercel)
-![Backend](https://img.shields.io/badge/backend-Render-blue?logo=render)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Status: Active](https://img.shields.io/badge/status-active-brightgreen)](https://github.com/Chuky006/MatchyApp/commits/main)
+[![Frontend: Vercel](https://img.shields.io/badge/frontend-Vercel-black?logo=vercel)](https://matchy-app.vercel.app)
+[![Backend: Render](https://img.shields.io/badge/backend-Render-blue?logo=render)](https://matchyapp-7.onrender.com)
 
 MatchyApp is a simple mentor-mentee matching web app built to help incubators and accelerators connect mentors with mentees. It allows mentees to find mentors, send mentorship requests, book sessions, and receive feedback. Mentors can manage requests, set availability, and leave feedback after sessions. Admins can view all users, assign mentors, and monitor the whole process.
 
