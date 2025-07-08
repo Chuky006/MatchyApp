@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "../services/axios";
 import { useAuth } from "../context/useAuth";
-import { useNavigate } from "react-router-dom";
 import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
+import { useMentorProfileCheck } from "../hooks/useProfileCheck";
 
 interface Request {
   _id: string;
@@ -21,45 +21,16 @@ interface Session {
 
 const MentorDashboard = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [requests, setRequests] = useState<Request[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
   const [tab, setTab] = useState<"requests" | "sessions" | "feedback">("requests");
 
-  useEffect(() => {
-    const checkProfile = async () => {
-      try {
-        const res = await axios.get("/api/profile/me", {
-          withCredentials: true,
-        });
-        const profile = res.data?.profile;
-        if (
-          !profile ||
-          !profile.bio ||
-          profile.skills?.length === 0 ||
-          !profile.experience
-        ) {
-          navigate("/mentor/profile");
-        } else {
-          setLoading(false);
-        }
-      } catch {
-        console.error("⚠️ Profile check failed");
-        navigate("/mentor/profile");
-      }
-    };
+  useMentorProfileCheck(); 
 
+  useEffect(() => {
     if (user?.role === "mentor") {
-      checkProfile();
-    } else {
-      setLoading(false);
-    }
-  }, [user, navigate]);
-
-  useEffect(() => {
-    if (!loading && user?.role === "mentor") {
       axios
         .get("/api/requests/received", { withCredentials: true })
         .then((res) => setRequests(res.data.requests))
@@ -69,8 +40,10 @@ const MentorDashboard = () => {
         .get("/api/sessions", { withCredentials: true })
         .then((res) => setSessions(res.data.sessions))
         .catch(() => console.error("Failed to load sessions"));
+
+      setLoading(false);
     }
-  }, [loading, user]);
+  }, [user]);
 
   const handleFeedbackSubmit = async (sessionId: string) => {
     try {

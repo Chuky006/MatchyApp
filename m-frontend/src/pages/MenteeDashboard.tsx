@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import axios from "../services/axios";
 import { useAuth } from "../context/useAuth";
 import Topbar from "../components/Topbar";
+import { useMenteeProfileCheck } from "../hooks/useProfileCheck";
 
 interface Request {
   _id: string;
@@ -20,8 +21,6 @@ interface Session {
 
 const MenteeDashboard = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"requests" | "sessions">("requests");
 
   const [requests, setRequests] = useState<Request[]>([]);
@@ -29,37 +28,9 @@ const MenteeDashboard = () => {
   const [error, setError] = useState("");
   const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
 
-  //Check profile completeness
-  useEffect(() => {
-    const checkProfile = async () => {
-      try {
-        const res = await axios.get("/api/profile/me", {
-          withCredentials: true,
-        });
+  useMenteeProfileCheck(); //Ensures profile is complete before proceeding
 
-        const profile = res.data?.profile;
-
-        if (!profile || !profile.bio || profile.goals.length === 0) {
-          console.log("🔁 Redirecting mentee: incomplete profile");
-          navigate("/mentee/profile");
-        } else {
-          setLoading(false);
-        }
-      } catch (err) {
-        const axiosError = err as AxiosError;
-        console.error("⚠️ Mentee profile check failed:", axiosError);
-        navigate("/mentee/profile");
-      }
-    };
-
-    if (user?.role === "mentee") {
-      checkProfile();
-    } else {
-      setLoading(false);
-    }
-  }, [user, navigate]);
-
-  //Load data based on tab
+  //Load data when tab changes
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -77,8 +48,8 @@ const MenteeDashboard = () => {
       }
     };
 
-    if (!loading) fetchData();
-  }, [tab, loading]);
+    fetchData();
+  }, [tab]);
 
   const handleFeedbackSubmit = async (sessionId: string) => {
     try {
@@ -88,15 +59,13 @@ const MenteeDashboard = () => {
         { withCredentials: true }
       );
       alert("✅ Feedback submitted!");
-      location.reload(); //or re-fetch sessions
+      location.reload(); // Optional: refetch sessions instead of reloading
     } catch (err) {
       const axiosError = err as AxiosError;
       console.error("❌ Feedback submission failed", axiosError);
       alert("❌ Failed to submit feedback.");
     }
   };
-
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
     <>
