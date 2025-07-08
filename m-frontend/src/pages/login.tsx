@@ -23,8 +23,16 @@ const Login = () => {
       );
       const { user } = res.data;
 
-      console.log("Login successful:", user);
+      console.log("✅ Login successful:", user);
       setUser(user);
+
+      // 🔍 DEBUG: Manually call /api/profile/me after login
+      try {
+        const profileRes = await axiosInstance.get("/profile/me");
+        console.log("📥 Manual /me response:", profileRes.data);
+      } catch (profileErr) {
+        console.error("❌ Manual /me request failed:", profileErr);
+      }
 
       //Redirect based on role
       switch (user.role) {
