@@ -25,7 +25,6 @@ const allowedOrigins = [
   "http://localhost:5173",
 ];
 
-//Middleware
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -36,7 +35,15 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Required to send cookies
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+      "Origin",
+    ],
   })
 );
 

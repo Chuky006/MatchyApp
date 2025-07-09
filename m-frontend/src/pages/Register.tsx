@@ -25,7 +25,7 @@ const Register = () => {
     setError("");
 
     try {
-      await axiosInstance.post("/auth/register", formData); //no double `/api`
+      await axiosInstance.post("/auth/register", formData);
       navigate("/login"); //Redirect on success
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;

@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(null);
         console.log("No user found");
       } finally {
-        setLoading(false); // Done fetching
+        setLoading(false);
       }
     };
 
