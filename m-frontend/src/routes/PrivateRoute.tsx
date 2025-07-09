@@ -10,10 +10,12 @@ const PrivateRoute = ({
   children: JSX.Element;
   allowedRoles: string[];
 }) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth(); // Make sure your useAuth provides loading state
 
   console.log("🔐 PrivateRoute user:", user);
   console.log("🔐 Allowed roles:", allowedRoles);
+
+  if (loading) return <p className="text-center mt-10">Loading...</p>; // ⏳ Avoid redirecting before auth loads
 
   if (!user) return <Navigate to="/login" />;
   if (!allowedRoles.includes(user.role)) return <Navigate to="/" />;

@@ -15,11 +15,16 @@ const Topbar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center bg-blue-600 text-white px-6 py-3 shadow-md">
-      <h1 className="text-xl font-bold">Matchy</h1>
+    <div className="flex justify-between items-center bg-purple-700 text-white px-6 py-3 shadow-md font-sans">
+      <h1
+        onClick={() => navigate("/")}
+        className="text-2xl font-bold tracking-wide cursor-pointer"
+      >
+        MATCHY
+      </h1>
       <button
         onClick={handleLogout}
-        className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white"
+        className="bg-white text-purple-700 px-4 py-2 rounded hover:bg-purple-100 transition font-semibold shadow"
       >
         Logout
       </button>

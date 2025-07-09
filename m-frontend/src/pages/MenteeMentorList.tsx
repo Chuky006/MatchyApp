@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import axios, { AxiosError } from "axios";
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../services/axios"; // use your custom axios config
+import { AxiosError } from "axios";
 
 interface Mentor {
   _id: string;
@@ -9,6 +10,7 @@ interface Mentor {
   bio: string;
   skills: string[];
   experience: string;
+  profileStatus: "Available" | "Unavailable" | "Pending";
 }
 
 const MenteeMentorList = () => {
@@ -20,8 +22,8 @@ const MenteeMentorList = () => {
   useEffect(() => {
     const fetchMentors = async () => {
       try {
-        const res = await axios.get("/api/profile/mentors", { withCredentials: true });
-        setMentors(res.data.mentors); //assuming backend sends { mentors: [] }
+        const res = await axiosInstance.get("/profile/mentors");
+        setMentors(res.data.mentors); // assuming backend sends { mentors: [] }
       } catch (err) {
         const error = err as AxiosError;
         console.error(error);
@@ -34,13 +36,9 @@ const MenteeMentorList = () => {
 
   const handleRequest = async (mentorId: string) => {
     try {
-      await axios.post(
-        "/api/requests",
-        { mentorId },
-        { withCredentials: true }
-      );
+      await axiosInstance.post("/requests", { mentorId });
       alert("Mentorship request sent!");
-      navigate("/mentee/dashboard"); //Redirect to dashboard
+      navigate("/mentee/dashboard");
     } catch (err) {
       const error = err as AxiosError;
       console.error(error);
@@ -60,14 +58,20 @@ const MenteeMentorList = () => {
         <p className="text-center">No mentors available.</p>
       ) : (
         mentors.map((mentor) => (
-          <div key={mentor._id} className="bg-white p-4 mb-4 rounded shadow">
+          <div
+            key={mentor._id}
+            className="bg-white p-4 mb-4 rounded shadow hover:shadow-md transition"
+          >
             <h3 className="text-lg font-semibold">{mentor.name}</h3>
             <p className="text-sm text-gray-600 mb-2">{mentor.bio}</p>
             <p className="text-sm">Skills: {mentor.skills.join(", ")}</p>
             <p className="text-sm">Experience: {mentor.experience} years</p>
+            <p className="text-xs text-green-600 font-medium mt-1">
+              Status: {mentor.profileStatus}
+            </p>
             <button
               onClick={() => handleRequest(mentor._id)}
-              className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
             >
               Request Mentorship
             </button>

@@ -12,6 +12,9 @@ import availabilityRoutes from "./routes/availabilityRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import errorHandler from "./middleware/errorHandler.js";
+import mentorRoutes from "./routes/mentorRoute.js";
+
+
 
 dotenv.config();
 
@@ -58,6 +61,7 @@ app.use("/api/requests", mentorshipRoutes);
 app.use("/api/availability", availabilityRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/mentor", mentorRoutes);
 
 //Welcome Route
 app.get("/", (req, res) => {

@@ -1,7 +1,8 @@
 import { useState } from "react";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../services/axios.ts";
 
 const MentorProfile = () => {
   const { user } = useAuth();
@@ -17,17 +18,17 @@ const MentorProfile = () => {
     e.preventDefault();
 
     try {
-      await axios.post(
-        "/api/profile",
-        {
-          bio,
-          skills: skills.split(",").map((s) => s.trim()),
-          experience,
-        },
-        { withCredentials: true }
-      );
+      await axiosInstance.post("/mentor/add", {
+        userId: user?.id, // ✅ link mentor to Auth user
+        name: user?.name,
+        email: user?.email,
+        bio,
+        skills: skills.split(",").map((s) => s.trim()),
+        experience,
+        profileStatus: "Available",
+      });
 
-      setSuccess("Profile created successfully!");
+      setSuccess("Mentor profile created successfully!");
       setError("");
       navigate("/mentor/dashboard");
     } catch (err) {
@@ -51,6 +52,7 @@ const MentorProfile = () => {
           onChange={(e) => setBio(e.target.value)}
           className="w-full p-2 border rounded"
           rows={3}
+          required
         />
         <input
           type="text"
@@ -58,6 +60,7 @@ const MentorProfile = () => {
           value={skills}
           onChange={(e) => setSkills(e.target.value)}
           className="w-full p-2 border rounded"
+          required
         />
         <input
           type="text"
@@ -65,6 +68,7 @@ const MentorProfile = () => {
           value={experience}
           onChange={(e) => setExperience(e.target.value)}
           className="w-full p-2 border rounded"
+          required
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
         {success && <p className="text-green-500 text-sm">{success}</p>}
@@ -80,3 +84,4 @@ const MentorProfile = () => {
 };
 
 export default MentorProfile;
+

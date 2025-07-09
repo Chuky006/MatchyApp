@@ -10,6 +10,7 @@ import MenteeMentorList from "./pages/MenteeMentorList";
 import EditProfile from "./pages/EditProfile";
 import MenteeProfile from "./pages/MenteeProfile";
 import Home from "./pages/Home";
+import BookMentor from "./pages/BookMentor"; // ✅ new import
 
 const App = () => {
   return (
@@ -26,7 +27,7 @@ const App = () => {
         <Route
           path="/admin/dashboard"
           element={
-            <PrivateRoute allowedRoles= {["admin"]}>
+            <PrivateRoute allowedRoles={["admin"]}>
               <AdminDashboard />
             </PrivateRoute>
           }
@@ -76,6 +77,15 @@ const App = () => {
           element={
             <PrivateRoute allowedRoles={["mentee"]}>
               <MenteeProfile />
+            </PrivateRoute>
+          }
+        />
+        {/* ✅ NEW: Book session with mentor */}
+        <Route
+          path="/book/:mentorId"
+          element={
+            <PrivateRoute allowedRoles={["mentee"]}>
+              <BookMentor />
             </PrivateRoute>
           }
         />

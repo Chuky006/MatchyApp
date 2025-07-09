@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "../services/axios"; 
+import axios from "../services/axios";
 import { useAuth } from "../context/useAuth";
 import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
@@ -72,7 +72,13 @@ const MentorDashboard = () => {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="flex">
+    <div
+      className="min-h-screen flex bg-cover bg-center"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1950&q=80')",
+      }}
+    >
       <Sidebar
         links={[
           { label: "Requests", path: "#", onClick: () => setTab("requests") },
@@ -82,14 +88,16 @@ const MentorDashboard = () => {
       />
       <div className="flex-1 ml-64">
         <Topbar />
-        <div className="max-w-5xl mx-auto mt-10 p-6 bg-white shadow rounded">
-          <h1 className="text-2xl font-bold text-center mb-4">
+        <div className="max-w-5xl mx-auto mt-10 p-6 bg-white bg-opacity-95 shadow-md rounded-lg">
+          <h1 className="text-3xl font-bold text-purple-700 text-center mb-6">
             Welcome, Mentor {user?.name}
           </h1>
 
           {tab === "requests" && (
             <section className="mt-6">
-              <h2 className="text-xl font-semibold mb-2">Mentorship Requests</h2>
+              <h2 className="text-xl font-semibold text-purple-700 mb-2">
+                Mentorship Requests
+              </h2>
               {requests.length === 0 ? (
                 <p className="text-gray-600">No requests received yet.</p>
               ) : (
@@ -97,7 +105,7 @@ const MentorDashboard = () => {
                   {requests.map((req) => (
                     <li
                       key={req._id}
-                      className="border p-3 rounded shadow-sm flex justify-between items-center"
+                      className="border p-3 rounded shadow-sm bg-white flex justify-between items-center"
                     >
                       <div>
                         Mentee: <strong>{req.mentee.name}</strong> - Status:{" "}
@@ -138,19 +146,22 @@ const MentorDashboard = () => {
 
           {tab === "sessions" && (
             <section className="mt-8">
-              <h2 className="text-xl font-semibold mb-2">Booked Sessions</h2>
+              <h2 className="text-xl font-semibold text-purple-700 mb-2">
+                Booked Sessions
+              </h2>
               {sessions.length === 0 ? (
                 <p className="text-gray-600">No sessions booked yet.</p>
               ) : (
-                <ul className="space-y-2">
+                <ul className="space-y-4">
                   {sessions.map((session) => (
                     <li
                       key={session._id}
-                      className="border p-3 rounded shadow-sm space-y-2"
+                      className="border p-4 rounded shadow-sm bg-white"
                     >
-                      <div>
-                        Mentee: <strong>{session.mentee.name}</strong> <br />
-                        Date: {new Date(session.scheduledDate).toLocaleString()}
+                      <div className="text-sm text-gray-800">
+                        <strong>Mentee:</strong> {session.mentee.name} <br />
+                        <strong>Date:</strong>{" "}
+                        {new Date(session.scheduledDate).toLocaleString()}
                       </div>
 
                       {!session.feedbackFromMentor && (
@@ -159,7 +170,7 @@ const MentorDashboard = () => {
                             e.preventDefault();
                             handleFeedbackSubmit(session._id);
                           }}
-                          className="space-y-2"
+                          className="mt-2 space-y-2"
                         >
                           <input
                             name="feedback"
@@ -175,7 +186,7 @@ const MentorDashboard = () => {
                           />
                           <button
                             type="submit"
-                            className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                            className="bg-purple-700 text-white px-4 py-1 rounded hover:bg-purple-800 transition"
                           >
                             Submit Feedback
                           </button>
@@ -190,7 +201,9 @@ const MentorDashboard = () => {
 
           {tab === "feedback" && (
             <section className="mt-8">
-              <h2 className="text-xl font-semibold mb-2">Mentee Feedback</h2>
+              <h2 className="text-xl font-semibold text-purple-700 mb-2">
+                Mentee Feedback
+              </h2>
               {sessions.filter((s) => s.feedbackFromMentee).length === 0 ? (
                 <p className="text-gray-600">No feedback received yet.</p>
               ) : (
@@ -198,7 +211,10 @@ const MentorDashboard = () => {
                   {sessions
                     .filter((s) => s.feedbackFromMentee)
                     .map((s) => (
-                      <li key={s._id} className="border p-3 rounded shadow-sm">
+                      <li
+                        key={s._id}
+                        className="border p-3 rounded shadow-sm bg-white"
+                      >
                         <strong>{s.mentee.name}</strong>:{" "}
                         <span className="italic text-gray-700">
                           {s.feedbackFromMentee}

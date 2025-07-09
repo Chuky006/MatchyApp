@@ -28,7 +28,7 @@ const MenteeDashboard = () => {
   const [error, setError] = useState("");
   const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
 
-  useMenteeProfileCheck(); //Ensures profile is complete before proceeding
+  useMenteeProfileCheck(); // Ensures profile is complete before proceeding
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,25 +65,35 @@ const MenteeDashboard = () => {
   };
 
   return (
-    <>
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1601933470928-cddc201a7cdd?auto=format&fit=crop&w=1950&q=80')",
+      }}
+    >
       <Topbar />
-      <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow rounded">
-        <h1 className="text-2xl font-bold text-center mb-6">
+      <div className="max-w-4xl mx-auto mt-10 p-6 bg-white bg-opacity-95 shadow-md rounded-lg">
+        <h1 className="text-3xl font-bold text-purple-700 text-center mb-6">
           Welcome, Mentee {user?.name}
         </h1>
 
         <div className="flex justify-center gap-4 mb-6">
           <button
-            className={`px-4 py-2 rounded ${
-              tab === "requests" ? "bg-blue-600 text-white" : "bg-gray-200"
+            className={`px-4 py-2 rounded font-semibold transition ${
+              tab === "requests"
+                ? "bg-purple-700 text-white"
+                : "bg-gray-200 text-black hover:bg-purple-100"
             }`}
             onClick={() => setTab("requests")}
           >
             My Requests
           </button>
           <button
-            className={`px-4 py-2 rounded ${
-              tab === "sessions" ? "bg-blue-600 text-white" : "bg-gray-200"
+            className={`px-4 py-2 rounded font-semibold transition ${
+              tab === "sessions"
+                ? "bg-purple-700 text-white"
+                : "bg-gray-200 text-black hover:bg-purple-100"
             }`}
             onClick={() => setTab("sessions")}
           >
@@ -91,18 +101,21 @@ const MenteeDashboard = () => {
           </button>
         </div>
 
-        {error && <p className="text-red-500 text-center">{error}</p>}
+        {error && <p className="text-red-600 text-center mb-4">{error}</p>}
 
         {tab === "requests" && (
           <div>
-            <h2 className="text-xl font-semibold mb-2">Mentorship Requests</h2>
+            <h2 className="text-xl font-semibold text-purple-700 mb-3">
+              Mentorship Requests
+            </h2>
             {requests.length === 0 ? (
               <p>No requests found.</p>
             ) : (
-              <ul>
+              <ul className="divide-y">
                 {requests.map((r) => (
-                  <li key={r._id} className="border-b py-2">
-                    Mentor: {r.mentor.name} — Status: {r.status}
+                  <li key={r._id} className="py-2">
+                    Mentor: <strong>{r.mentor.name}</strong> — Status:{" "}
+                    <span className="italic">{r.status}</span>
                   </li>
                 ))}
               </ul>
@@ -112,7 +125,7 @@ const MenteeDashboard = () => {
 
         {tab === "sessions" && (
           <div>
-            <h2 className="text-xl font-semibold mb-2">
+            <h2 className="text-xl font-semibold text-purple-700 mb-3">
               Upcoming or Completed Sessions
             </h2>
             {sessions.length === 0 ? (
@@ -120,15 +133,20 @@ const MenteeDashboard = () => {
             ) : (
               <ul className="space-y-4">
                 {sessions.map((s) => (
-                  <li key={s._id} className="border p-3 rounded shadow-sm">
-                    <div>
-                      With: <strong>{s.mentor.name}</strong> <br />
-                      Date: {new Date(s.scheduledDate).toLocaleString()}
+                  <li
+                    key={s._id}
+                    className="border border-gray-300 p-4 rounded bg-white shadow-sm"
+                  >
+                    <div className="text-sm text-gray-800">
+                      <strong>With:</strong> {s.mentor.name} <br />
+                      <strong>Date:</strong>{" "}
+                      {new Date(s.scheduledDate).toLocaleString()}
                     </div>
 
                     {s.feedbackFromMentor && (
-                      <p className="text-sm text-gray-600 mt-1">
-                        Mentor Feedback: <em>{s.feedbackFromMentor}</em>
+                      <p className="text-sm text-gray-600 mt-2">
+                        <strong>Mentor Feedback:</strong>{" "}
+                        <em>{s.feedbackFromMentor}</em>
                       </p>
                     )}
 
@@ -138,7 +156,7 @@ const MenteeDashboard = () => {
                           e.preventDefault();
                           handleFeedbackSubmit(s._id);
                         }}
-                        className="mt-2 space-y-2"
+                        className="mt-3 space-y-2"
                       >
                         <input
                           type="text"
@@ -154,7 +172,7 @@ const MenteeDashboard = () => {
                         />
                         <button
                           type="submit"
-                          className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                          className="bg-purple-700 text-white px-4 py-1 rounded hover:bg-purple-800 transition"
                         >
                           Submit Feedback
                         </button>
@@ -167,7 +185,7 @@ const MenteeDashboard = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

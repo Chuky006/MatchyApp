@@ -22,7 +22,6 @@ const Login = () => {
       console.log("✅ Login successful:", user);
       setUser(user);
 
-      // 🔍 DEBUG: Manually call /profile/me after login
       try {
         const profileRes = await axiosInstance.get("/profile/me");
         console.log("📥 Manual /me response:", profileRes.data);
@@ -30,7 +29,6 @@ const Login = () => {
         console.error("❌ Manual /me request failed:", profileErr);
       }
 
-      //Redirect based on role
       switch (user.role) {
         case "admin":
           navigate("/admin/dashboard");
@@ -52,35 +50,44 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded shadow">
-      <h1 className="text-xl font-bold mb-4 text-center">Login</h1>
-      <form onSubmit={handleLogin} className="space-y-4">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          className="w-full p-2 border rounded"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="w-full p-2 border rounded"
-          required
-        />
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
-          Login
-        </button>
-      </form>
-
-      <p className="text-sm text-center mt-4">
-        Don’t have an account?{" "}
-        <a href="/register" className="text-blue-600 underline">Register</a>
-      </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-purple-100 font-sans">
+      <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg border border-purple-200">
+        <h1 className="text-3xl font-bold text-purple-700 text-center mb-6">Login</h1>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            required
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            required
+          />
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          <button
+            type="submit"
+            className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 rounded-md font-medium transition"
+          >
+            Login
+          </button>
+        </form>
+        <p className="text-sm text-center mt-4">
+          Don’t have an account?{" "}
+          <a
+            href="/register"
+            className="text-purple-600 underline hover:text-purple-800 transition"
+          >
+            Register
+          </a>
+        </p>
+      </div>
     </div>
   );
 };
