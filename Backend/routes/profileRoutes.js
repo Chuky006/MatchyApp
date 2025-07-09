@@ -9,12 +9,12 @@ import {
   getMyProfile,
   updateMyProfile,
 } from "../controller/profileController.js";
-import { createMentor } from "../controller/mentorController.js"; // ✅ FIXED import name
+import { createMentor } from "../controller/mentorController.js"; 
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const profileRoutes = express.Router();
 
-// ✅ Route to add mentor (used by admin or internal form)
+//Route to add mentor (used by admin or internal form)
 profileRoutes.post("/add", createMentor);
 
 // Authenticated user fetches own profile
@@ -32,7 +32,7 @@ profileRoutes.put("/editProfile/:id", authMiddleware, editProfile);
 // Get all mentor profiles (for mentees to view)
 profileRoutes.get("/mentors", authMiddleware, getMentorProfiles);
 
-// ✅ Toggle mentor availability (mentor dashboard button)
+//Toggle mentor availability (mentor dashboard button)
 profileRoutes.put("/toggle-availability", authMiddleware, toggleAvailability);
 
 export default profileRoutes;

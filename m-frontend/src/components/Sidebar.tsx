@@ -39,7 +39,7 @@ const Sidebar = ({ links }: { links: SidebarLink[] }) => {
               key={link.label}
               onClick={() => {
                 if (link.onClick) link.onClick();
-                setIsOpen(false); // close menu on mobile after click
+                setIsOpen(false); //close menu on mobile after click
               }}
               className={`text-left px-4 py-2 rounded w-full transition font-medium ${
                 location.pathname === link.path

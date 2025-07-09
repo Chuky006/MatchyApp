@@ -10,7 +10,7 @@ import MenteeMentorList from "./pages/MenteeMentorList";
 import EditProfile from "./pages/EditProfile";
 import MenteeProfile from "./pages/MenteeProfile";
 import Home from "./pages/Home";
-import BookMentor from "./pages/BookMentor"; // ✅ new import
+import BookMentor from "./pages/BookMentor";
 
 const App = () => {
   return (

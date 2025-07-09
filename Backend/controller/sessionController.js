@@ -38,7 +38,6 @@ const bookSession = async (req, res) => {
 const mentee = await AuthModel.findById(menteeId);
 
 
-//Format readable time
 const formattedDate = new Date(date).toLocaleDateString();
 const formattedTime = time;
 
@@ -114,7 +113,7 @@ const menteeFeedback = async (req, res) => {
   }
 };
 
-//Mentor leaves optional comment
+//Mentor optional comment
 const mentorFeedback = async (req, res) => {
   try {
     const sessionId = req.params.id;

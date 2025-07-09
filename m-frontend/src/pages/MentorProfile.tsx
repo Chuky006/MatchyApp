@@ -19,7 +19,7 @@ const MentorProfile = () => {
 
     try {
       await axiosInstance.post("/mentor/add", {
-        userId: user?.id, // ✅ link mentor to Auth user
+        userId: user?.id, //link mentor to Auth user
         name: user?.name,
         email: user?.email,
         bio,

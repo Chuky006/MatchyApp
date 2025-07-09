@@ -1,6 +1,6 @@
 import AvailabilityModel from "../models/availabilitySchema.js";
 
-//Mentor sets availability (can be called multiple times for different days/times)
+//Mentor sets availability
 const setAvailability = async (req, res) => {
   try {
     const mentorId = req.user._id;

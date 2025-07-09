@@ -9,7 +9,7 @@ export interface User {
 
 export interface AuthContextType {
   user: User | null;
-  loading: boolean; // ✅ Add this line
+  loading: boolean;
   setUser: (user: User | null) => void;
 }
 

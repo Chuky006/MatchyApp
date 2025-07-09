@@ -5,7 +5,7 @@ import request from "supertest";
 let adminToken;
 
 beforeAll(async () => {
-  // Log in as admin
+  //Log in as admin
   const res = await request(app).post("/api/auth/login").send({
     email: "admin@example.com",
     password: "adminpass"

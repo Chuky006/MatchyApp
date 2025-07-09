@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axios";
 import { useAuth } from "../context/useAuth";
 
-// 🚫 Disabled mentee profile check
+//Disabled mentee profile check
 export const useMenteeProfileCheck = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export const useMenteeProfileCheck = () => {
         const res = await axiosInstance.get("/profile/me");
         const profile = res.data.profile;
         console.log("📥 Mentee profile loaded", profile);
-        // 🚫 No redirect logic
+        //No redirect logic
       } catch (err) {
         console.error("❌ Mentee profile check failed", err);
       }
@@ -26,7 +26,7 @@ export const useMenteeProfileCheck = () => {
   }, [user, navigate]);
 };
 
-// 🚫 Disabled mentor profile check
+//Disabled mentor profile check
 export const useMentorProfileCheck = () => {
   const { user } = useAuth();
   const navigate = useNavigate();

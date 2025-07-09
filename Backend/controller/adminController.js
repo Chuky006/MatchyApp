@@ -2,7 +2,7 @@ import AuthModel from "../models/authSchema.js";
 import MentorshipRequestModel from "../models/mentorshipRequestSchema.js";
 import SessionModel from "../models/sessionSchema.js";
 
-// GET all users
+//GET all users
 const getAllUsers = async (req, res) => {
   try {
     const users = await AuthModel.find().select("-password");
@@ -13,7 +13,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// GET all mentorship requests
+//GET all mentorship requests
 const getAllRequests = async (req, res) => {
   try {
     const requests = await MentorshipRequestModel.find()
@@ -28,7 +28,7 @@ const getAllRequests = async (req, res) => {
   }
 };
 
-// GET all sessions
+//GET all sessions
 const getAllSessions = async (req, res) => {
   try {
     const sessions = await SessionModel.find()
@@ -43,12 +43,12 @@ const getAllSessions = async (req, res) => {
   }
 };
 
-// POST /api/admin/assign - Assign mentor to mentee manually
+//POST /api/admin/assign - Assign mentor to mentee manually
 const assignMentorToMentee = async (req, res) => {
   try {
     const { mentorId, menteeId, message } = req.body;
 
-    // Validate mentor and mentee
+    //Validate mentor and mentee
     const mentor = await AuthModel.findById(mentorId);
     const mentee = await AuthModel.findById(menteeId);
 
@@ -60,13 +60,13 @@ const assignMentorToMentee = async (req, res) => {
       return res.status(404).json({ message: "Mentee not found or invalid role" });
     }
 
-    // Prevent duplicate assignment
+    //Prevent duplicate assignment
     const existing = await MentorshipRequestModel.findOne({ mentor: mentorId, mentee: menteeId });
     if (existing) {
       return res.status(400).json({ message: "Request already exists between these users" });
     }
 
-    // Save the request
+    //Save the request
     const request = await MentorshipRequestModel.create({
       mentor: mentorId,
       mentee: menteeId,

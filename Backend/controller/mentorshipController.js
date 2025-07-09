@@ -10,14 +10,14 @@ const createRequest = async (req, res) => {
     if (menteeId.toString() === mentorId) {
   return res.status(400).json({ message: "You cannot request yourself as a mentor" });
 
-    // Check if mentor exists
+    //Check if mentor exists
     const mentor = await AuthModel.findById(mentorId);
     if (!mentor || mentor.role !== "mentor") {
       return res.status(404).json({ message: "Mentor not found" });
 }
     }
 
-    // Check if a request already exists
+    //Check if a request already exists
     const existing = await MentorshipRequestModel.findOne({ mentee: menteeId, mentor: mentorId });
     if (existing) {
       return res.status(400).json({ message: "You’ve already sent a request to this mentor." });

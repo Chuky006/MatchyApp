@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../services/axios"; // use your custom axios config
+import axiosInstance from "../services/axios";
 import { AxiosError } from "axios";
 
 interface Mentor {
@@ -23,7 +23,7 @@ const MenteeMentorList = () => {
     const fetchMentors = async () => {
       try {
         const res = await axiosInstance.get("/profile/mentors");
-        setMentors(res.data.mentors); // assuming backend sends { mentors: [] }
+        setMentors(res.data.mentors); 
       } catch (err) {
         const error = err as AxiosError;
         console.error(error);

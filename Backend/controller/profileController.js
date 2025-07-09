@@ -2,7 +2,7 @@ import AuthModel from "../models/authSchema.js";
 
 //GET /api/profile/me
 const getMyProfile = async (req, res) => {
-  // ✅ TEMPORARY DEBUG LOGS
+  //TEMPORARY DEBUG LOGS
   console.log("📦 Cookies received:", req.cookies);
   console.log("👤 Decoded user from authMiddleware:", req.user);
 

@@ -1,21 +1,21 @@
 import bcrypt from "bcryptjs";
 import Mentor from "../models/mentorSchema.js";
 
-// ✅ CREATE a new mentor profile
+//CREATE a new mentor profile
 export const createMentor = async (req, res) => {
   try {
     const { userId, name, email, password, bio, skills, experience, profileStatus } = req.body;
 
-    // Check if mentor with same userId already exists
+    //Check if mentor with same userId already exists
     const existingMentor = await Mentor.findOne({ userId });
     if (existingMentor) {
       return res.status(400).json({ message: "Mentor profile already exists" });
     }
 
-    // Hash the password
+    //Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create mentor profile
+    //Create mentor profile
     const mentor = new Mentor({
       userId,
       name,
@@ -34,7 +34,7 @@ export const createMentor = async (req, res) => {
   }
 };
 
-// ✅ GET mentor profile by userId (from Auth)
+//GET mentor profile by userId (from Auth)
 export const getMentorById = async (req, res) => {
   try {
     const mentor = await Mentor.findOne({ userId: req.params.id }).select("-password");

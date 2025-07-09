@@ -15,7 +15,7 @@ const PrivateRoute = ({
   console.log("🔐 PrivateRoute user:", user);
   console.log("🔐 Allowed roles:", allowedRoles);
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>; // ⏳ Avoid redirecting before auth loads
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   if (!user) return <Navigate to="/login" />;
   if (!allowedRoles.includes(user.role)) return <Navigate to="/" />;

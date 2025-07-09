@@ -28,7 +28,7 @@ const MenteeDashboard = () => {
   const [error, setError] = useState("");
   const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
 
-  useMenteeProfileCheck(); // Ensures profile is complete before proceeding
+  useMenteeProfileCheck(); //Ensures profile is complete before proceeding
 
   useEffect(() => {
     const fetchData = async () => {
