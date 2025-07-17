@@ -22,11 +22,11 @@ const MenteeMentorList = () => {
   useEffect(() => {
     const fetchMentors = async () => {
       try {
-        const res = await axiosInstance.get("/profile/mentors");
-        setMentors(res.data.mentors); 
+        const res = await axiosInstance.get("/mentor/mentors"); // ✅ Confirm this matches your backend route
+        setMentors(res.data.mentors);
       } catch (err) {
         const error = err as AxiosError;
-        console.error(error);
+        console.error("❌ Failed to fetch mentors:", error.response?.status, error.response?.data || error.message);
         setError("Failed to load mentors.");
       }
     };
@@ -34,52 +34,93 @@ const MenteeMentorList = () => {
     fetchMentors();
   }, []);
 
-  const handleRequest = async (mentorId: string) => {
+  const handleRequest = async (mentorId: string, profileStatus: string) => {
+    if (profileStatus !== "Available") {
+      alert("This mentor is currently unavailable.");
+      return;
+    }
+
     try {
       await axiosInstance.post("/requests", { mentorId });
-      alert("Mentorship request sent!");
+      alert("✅ Mentorship request sent!");
       navigate("/mentee/dashboard");
     } catch (err) {
       const error = err as AxiosError;
-      console.error(error);
-      alert("Failed to send request.");
+      console.error("❌ Request error:", error.response?.data || error.message);
+      alert("❌ Failed to send request.");
     }
   };
 
   if (!user || user.role !== "mentee") {
-    return <p className="text-center mt-10 text-red-500">Unauthorized</p>;
+    return (
+      <div className="text-center mt-10 text-red-500">
+        Unauthorized. Only mentees can view this page.
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4 text-center">Available Mentors</h2>
-      {error && <p className="text-red-500 mb-2">{error}</p>}
-      {mentors.length === 0 ? (
-        <p className="text-center">No mentors available.</p>
-      ) : (
-        mentors.map((mentor) => (
-          <div
-            key={mentor._id}
-            className="bg-white p-4 mb-4 rounded shadow hover:shadow-md transition"
+    <div className="min-h-screen bg-purple-50 py-8 px-4">
+      <div className="max-w-3xl mx-auto bg-white rounded-xl p-6 shadow-md">
+        <h2 className="text-2xl font-bold mb-4 text-center text-purple-700">
+          Explore Available Mentors
+        </h2>
+
+        <div className="mb-4 text-right">
+          <button
+            onClick={() => navigate("/mentee/dashboard")}
+            className="text-sm text-purple-600 underline hover:text-purple-800"
           >
-            <h3 className="text-lg font-semibold">{mentor.name}</h3>
-            <p className="text-sm text-gray-600 mb-2">{mentor.bio}</p>
-            <p className="text-sm">Skills: {mentor.skills.join(", ")}</p>
-            <p className="text-sm">Experience: {mentor.experience} years</p>
-            <p className="text-xs text-green-600 font-medium mt-1">
-              Status: {mentor.profileStatus}
-            </p>
-            <button
-              onClick={() => handleRequest(mentor._id)}
-              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            ← Back to Dashboard
+          </button>
+        </div>
+
+        {error && <p className="text-red-500 mb-2 text-center">{error}</p>}
+
+        {mentors.length === 0 ? (
+          <p className="text-center text-gray-700">No mentors available at the moment.</p>
+        ) : (
+          mentors.map((mentor) => (
+            <div
+              key={mentor._id}
+              className="border p-4 mb-4 rounded shadow-sm hover:shadow-md transition bg-white"
             >
-              Request Mentorship
-            </button>
-          </div>
-        ))
-      )}
+              <h3 className="text-lg font-semibold text-gray-900">{mentor.name}</h3>
+              <p className="text-sm text-gray-600 mb-1">{mentor.bio}</p>
+              <p className="text-sm mb-1">
+                <strong>Skills:</strong> {mentor.skills.join(", ")}
+              </p>
+              <p className="text-sm mb-1">
+                <strong>Experience:</strong> {mentor.experience} years
+              </p>
+              <p
+                className={`text-xs font-medium mt-1 ${
+                  mentor.profileStatus === "Available"
+                    ? "text-green-600"
+                    : "text-gray-500"
+                }`}
+              >
+                Status: {mentor.profileStatus}
+              </p>
+
+              <button
+                onClick={() => handleRequest(mentor._id, mentor.profileStatus)}
+                className={`mt-3 px-4 py-2 rounded transition text-white ${
+                  mentor.profileStatus === "Available"
+                    ? "bg-blue-600 hover:bg-blue-700"
+                    : "bg-gray-400 cursor-not-allowed"
+                }`}
+                disabled={mentor.profileStatus !== "Available"}
+              >
+                Request Mentorship
+              </button>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };
 
 export default MenteeMentorList;
+

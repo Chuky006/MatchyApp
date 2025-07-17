@@ -14,6 +14,7 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
     try {
       const res = await axiosInstance.post("/auth/login", { email, password });
@@ -24,9 +25,9 @@ const Login = () => {
 
       try {
         const profileRes = await axiosInstance.get("/profile/me");
-        console.log("📥 Manual /me response:", profileRes.data);
+        console.log("📥 /profile/me response:", profileRes.data);
       } catch (profileErr) {
-        console.error("❌ Manual /me request failed:", profileErr);
+        console.error("❌ /profile/me failed:", profileErr);
       }
 
       switch (user.role) {
@@ -80,12 +81,12 @@ const Login = () => {
         </form>
         <p className="text-sm text-center mt-4">
           Don’t have an account?{" "}
-          <a
-            href="/register"
+          <button
+            onClick={() => navigate("/register")}
             className="text-purple-600 underline hover:text-purple-800 transition"
           >
             Register
-          </a>
+          </button>
         </p>
       </div>
     </div>

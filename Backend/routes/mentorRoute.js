@@ -1,13 +1,21 @@
 import express from "express";
-import { createMentor, getMentorById } from "../controller/mentorController.js";
+import {
+  createMentor,
+  getMentorById,
+  getAllMentors, // ✅ NEW
+} from "../controller/mentorController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const mentorRouter = express.Router();
 
-//POST /api/mentor/add
+// ✅ For mentees to fetch list of mentors
+// GET /api/mentor/mentors
+mentorRouter.get("/mentors", authMiddleware, getAllMentors);
+
+// POST /api/mentor/add
 mentorRouter.post("/add", createMentor);
 
-// GET /api/mentor/:id (for useProfileCheck)
+// GET /api/mentor/:id (used for useProfileCheck)
 mentorRouter.get("/:id", authMiddleware, getMentorById);
 
 export default mentorRouter;

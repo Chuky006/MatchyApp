@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axios";
+import { AxiosError } from "axios";
 
 interface AvailabilitySlot {
   _id: string;
@@ -12,13 +13,13 @@ interface AvailabilitySlot {
 interface Session {
   _id: string;
   date: string;
-  time: string;
+  time: string; // format: "HH:mm-HH:mm"
   mentorId: string;
   menteeId: string;
 }
 
 const BookMentor = () => {
-  const { mentorId } = useParams();
+  const { mentorId } = useParams<{ mentorId: string }>();
   const navigate = useNavigate();
 
   const [availability, setAvailability] = useState<AvailabilitySlot[]>([]);
@@ -36,19 +37,32 @@ const BookMentor = () => {
         ]);
         setAvailability(availRes.data.availability || []);
         setSessions(sessionRes.data.sessions || []);
-      } catch (error) {
-        console.error("Error loading booking data", error);
+      } catch (err) {
+        const error = err as AxiosError;
+        console.error("Error loading booking data:", error.message);
+        setError("❌ Failed to load availability or sessions.");
       }
     };
 
-    fetchData();
+    if (mentorId) {
+      fetchData();
+    }
   }, [mentorId]);
+
+  const isSlotBooked = (date: string, timeRange: string) => {
+    return sessions.some((s) => s.date === date && s.time === timeRange);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!selectedDate || !selectedTime) {
-      setError("Please select both date and time.");
+      setError("❌ Please select both date and time.");
+      return;
+    }
+
+    if (isSlotBooked(selectedDate, selectedTime)) {
+      setError("❌ This time slot is already booked. Please choose another.");
       return;
     }
 
@@ -59,11 +73,12 @@ const BookMentor = () => {
         time: selectedTime,
       });
 
-      alert("Session booked successfully!");
+      alert("✅ Session booked successfully!");
       navigate("/mentee/dashboard");
     } catch (err) {
-      console.error(err);
-      setError("Failed to book session. Please try another time.");
+      const error = err as AxiosError;
+      console.error("Booking failed:", error.message);
+      setError("❌ Failed to book session. Please try again.");
     }
   };
 
@@ -78,7 +93,11 @@ const BookMentor = () => {
             type="date"
             className="border p-2 rounded w-full"
             value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
+            onChange={(e) => {
+              setSelectedDate(e.target.value);
+              setSelectedTime("");
+              setError("");
+            }}
           />
         </div>
 
@@ -88,16 +107,22 @@ const BookMentor = () => {
             className="border p-2 rounded w-full"
             value={selectedTime}
             onChange={(e) => setSelectedTime(e.target.value)}
+            disabled={!selectedDate}
           >
             <option value="">-- Select Time Slot --</option>
-            {availability.map((slot) => (
-              <option
-                key={slot._id}
-                value={`${slot.startTime}-${slot.endTime}`}
-              >
-                {slot.day}: {slot.startTime} - {slot.endTime}
-              </option>
-            ))}
+            {availability
+              .filter(
+                (slot) =>
+                  !isSlotBooked(selectedDate, `${slot.startTime}-${slot.endTime}`)
+              )
+              .map((slot) => (
+                <option
+                  key={slot._id}
+                  value={`${slot.startTime}-${slot.endTime}`}
+                >
+                  {slot.day}: {slot.startTime} - {slot.endTime}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -113,7 +138,7 @@ const BookMentor = () => {
 
       <div className="mt-8">
         <h2 className="text-lg font-semibold mb-2">Already Booked Sessions:</h2>
-        <ul>
+        <ul className="list-disc list-inside">
           {sessions.length === 0 ? (
             <p>No sessions booked yet.</p>
           ) : (

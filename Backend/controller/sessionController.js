@@ -2,27 +2,27 @@ import SessionModel from "../models/sessionSchema.js";
 import AuthModel from "../models/authSchema.js";
 import { sendEmail } from "../utils/sendEmail.js";
 
-//Mentee books a session with a mentor
+// Mentee books a session with a mentor
 const bookSession = async (req, res) => {
   try {
     const menteeId = req.user._id;
     const { mentorId, date, time } = req.body;
 
-    //Validate required fields
+    // Validate required fields
     if (!mentorId || !date || !time) {
       return res.status(400).json({ message: "All fields are required: mentorId, date, time" });
     }
 
-    //Check if mentor exists
+    // Check if mentor exists
     const mentor = await AuthModel.findById(mentorId);
     if (!mentor || mentor.role !== "mentor") {
       return res.status(404).json({ message: "Mentor not found" });
     }
 
-    //Check if mentor is already booked at that date and time
-    const existing = await SessionModel.findOne({ mentor: mentorId, date, time });
-    if (existing) {
-      return res.status(400).json({ message: "This time slot is already booked" });
+    // Check if mentor is already booked at that date and time
+    const conflict = await SessionModel.findOne({ mentor: mentorId, date, time });
+    if (conflict) {
+      return res.status(409).json({ message: "Mentor is already booked at this time" });
     }
 
     const newSession = new SessionModel({
@@ -34,26 +34,25 @@ const bookSession = async (req, res) => {
 
     await newSession.save();
 
-    //Fetch mentor and mentee details to send mails
-const mentee = await AuthModel.findById(menteeId);
+    // Fetch mentee details
+    const mentee = await AuthModel.findById(menteeId);
 
+    const formattedDate = new Date(date).toLocaleDateString();
+    const formattedTime = time;
 
-const formattedDate = new Date(date).toLocaleDateString();
-const formattedTime = time;
+    // Notify mentor
+    await sendEmail({
+      to: mentor.email,
+      subject: "New Mentorship Session Booked",
+      text: `Hi ${mentor.name},\n\nYou have a new session booked by ${mentee.name} on ${formattedDate} at ${formattedTime}.\n\n– Matchy App`,
+    });
 
-//Send email to mentor
-await sendEmail({
-  to: mentor.email,
-  subject: "New Mentorship Session Booked",
-  text: `Hi ${mentor.name},\n\nYou have a new session booked by ${mentee.name} on ${formattedDate} at ${formattedTime}.\n\nPlease prepare accordingly.\n\n– Matchy App`,
-});
-
-//Send email to mentee
-await sendEmail({
-  to: mentee.email,
-  subject: "Mentorship Session Confirmation",
-  text: `Hi ${mentee.name},\n\nYour session with ${mentor.name} is scheduled for ${formattedDate} at ${formattedTime}.\n\nThank you for using Matchy!\n\n– Matchy App`,
-});
+    // Notify mentee
+    await sendEmail({
+      to: mentee.email,
+      subject: "Mentorship Session Confirmation",
+      text: `Hi ${mentee.name},\n\nYour session with ${mentor.name} is scheduled for ${formattedDate} at ${formattedTime}.\n\n– Matchy App`,
+    });
 
     res.status(201).json({ message: "Session booked successfully", session: newSession });
   } catch (error) {
@@ -62,7 +61,6 @@ await sendEmail({
   }
 };
 
-//View all upcoming sessions for logged-in user (mentor or mentee)
 const getMySessions = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -82,7 +80,6 @@ const getMySessions = async (req, res) => {
   }
 };
 
-//Mentee submits feedback after session
 const menteeFeedback = async (req, res) => {
   try {
     const sessionId = req.params.id;
@@ -113,7 +110,6 @@ const menteeFeedback = async (req, res) => {
   }
 };
 
-//Mentor optional comment
 const mentorFeedback = async (req, res) => {
   try {
     const sessionId = req.params.id;

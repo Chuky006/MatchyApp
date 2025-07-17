@@ -10,7 +10,7 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    role: "mentee", //default role
+    role: "mentee",
   });
 
   const [error, setError] = useState("");
@@ -30,7 +30,7 @@ const Register = () => {
       navigate("/login");
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
-      setError(error?.response?.data?.message || "Registration failed");
+      setError(error?.response?.data?.message || "❌ Registration failed");
     }
   };
 
@@ -40,6 +40,7 @@ const Register = () => {
         <h1 className="text-3xl font-bold text-purple-700 text-center mb-6">
           Register
         </h1>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
@@ -79,7 +80,9 @@ const Register = () => {
             <option value="admin">Admin</option>
           </select>
 
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {error && (
+            <p className="text-red-500 text-sm text-center">{error}</p>
+          )}
 
           <button
             type="submit"
@@ -91,12 +94,12 @@ const Register = () => {
 
         <p className="text-sm text-center mt-4">
           Already have an account?{" "}
-          <a
-            href="/login"
+          <button
+            onClick={() => navigate("/login")}
             className="text-purple-600 underline hover:text-purple-800 transition"
           >
             Login
-          </a>
+          </button>
         </p>
       </div>
     </div>

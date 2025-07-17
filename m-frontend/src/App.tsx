@@ -16,14 +16,12 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Home Page */}
+        {/* 🏠 Public Routes */}
         <Route path="/" element={<Home />} />
-
-        {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected Routes */}
+        {/* 🔐 Admin */}
         <Route
           path="/admin/dashboard"
           element={
@@ -32,6 +30,8 @@ const App = () => {
             </PrivateRoute>
           }
         />
+
+        {/* 🔐 Mentor */}
         <Route
           path="/mentor/dashboard"
           element={
@@ -41,18 +41,20 @@ const App = () => {
           }
         />
         <Route
-          path="/mentee/dashboard"
-          element={
-            <PrivateRoute allowedRoles={["mentee"]}>
-              <MenteeDashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/mentor/profile"
           element={
             <PrivateRoute allowedRoles={["mentor"]}>
               <MentorProfile />
+            </PrivateRoute>
+          }
+        />
+
+        {/* 🔐 Mentee */}
+        <Route
+          path="/mentee/dashboard"
+          element={
+            <PrivateRoute allowedRoles={["mentee"]}>
+              <MenteeDashboard />
             </PrivateRoute>
           }
         />
@@ -65,14 +67,6 @@ const App = () => {
           }
         />
         <Route
-          path="/profile/edit"
-          element={
-            <PrivateRoute allowedRoles={["admin", "mentor", "mentee"]}>
-              <EditProfile />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/mentee/profile"
           element={
             <PrivateRoute allowedRoles={["mentee"]}>
@@ -80,12 +74,21 @@ const App = () => {
             </PrivateRoute>
           }
         />
-        {/* ✅ NEW: Book session with mentor */}
         <Route
           path="/book/:mentorId"
           element={
             <PrivateRoute allowedRoles={["mentee"]}>
               <BookMentor />
+            </PrivateRoute>
+          }
+        />
+
+        {/* 🔐 Shared: All roles */}
+        <Route
+          path="/profile/edit"
+          element={
+            <PrivateRoute allowedRoles={["admin", "mentor", "mentee"]}>
+              <EditProfile />
             </PrivateRoute>
           }
         />

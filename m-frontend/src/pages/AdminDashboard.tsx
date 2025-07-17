@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axios";
 import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
@@ -26,6 +27,7 @@ interface Session {
 }
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const [tab, setTab] = useState<"users" | "requests" | "assign" | "sessions">("users");
   const [users, setUsers] = useState<User[]>([]);
   const [requests, setRequests] = useState<Request[]>([]);
@@ -81,13 +83,14 @@ const AdminDashboard = () => {
     }
 
     try {
-      await axiosInstance.post("/admin/assign", { mentorId, menteeId });
-      setSuccess("Mentor assigned successfully");
+      const res = await axiosInstance.post("/admin/assign", { mentorId, menteeId });
+      setSuccess(res.data.message || "Mentor assigned successfully");
       setError("");
       setMentorId("");
       setMenteeId("");
-    } catch {
-      setError("Failed to assign mentor");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to assign mentor. Please ensure the IDs are valid and try again.");
     }
   };
 
@@ -138,7 +141,7 @@ const AdminDashboard = () => {
 
           {tab === "requests" && (
             <div>
-              <h2 className="text-xl font-semibold text-purple-700 mb-2">
+              <h2 className="text-xl font-semibold text-purple-700 mb-4">
                 Mentorship Requests
               </h2>
               {requests.length === 0 ? (
@@ -146,10 +149,18 @@ const AdminDashboard = () => {
               ) : (
                 <ul className="divide-y">
                   {requests.map((req) => (
-                    <li key={req._id} className="py-2">
-                      Mentee: <strong>{req.mentee.name}</strong> → Mentor:{" "}
-                      <strong>{req.mentor?.name || "Unassigned"}</strong> - Status:{" "}
-                      <span className="italic">{req.status}</span>
+                    <li key={req._id} className="py-2 flex justify-between items-center">
+                      <div>
+                        Mentee: <strong>{req.mentee.name}</strong> → Mentor:{" "}
+                        <strong>{req.mentor?.name || "Unassigned"}</strong> - Status:{" "}
+                        <span className="italic">{req.status}</span>
+                      </div>
+                      <button
+                        onClick={() => navigate(`/admin/requests/${req._id}`)}
+                        className="ml-4 text-sm text-blue-600 underline hover:text-blue-800"
+                      >
+                        View Details
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -229,6 +240,15 @@ const AdminDashboard = () => {
               )}
             </div>
           )}
+
+          <div className="mt-8">
+            <button
+              onClick={() => navigate("/")}
+              className="text-sm text-purple-600 underline hover:text-purple-800"
+            >
+              ← Back to Home
+            </button>
+          </div>
         </div>
       </div>
     </div>

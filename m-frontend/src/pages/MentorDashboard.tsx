@@ -4,6 +4,7 @@ import { useAuth } from "../context/useAuth";
 import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
 import { useMentorProfileCheck } from "../hooks/useProfileCheck";
+import { useNavigate } from "react-router-dom";
 
 interface Request {
   _id: string;
@@ -21,6 +22,7 @@ interface Session {
 
 const MentorDashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [requests, setRequests] = useState<Request[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -50,10 +52,10 @@ const MentorDashboard = () => {
       await axios.put(`/sessions/${sessionId}/mentor-feedback`, {
         feedback: feedbackMap[sessionId],
       });
-      alert("Feedback submitted!");
+      alert("✅ Feedback submitted!");
       location.reload();
     } catch {
-      alert("Failed to submit feedback.");
+      alert("❌ Failed to submit feedback.");
     }
   };
 
@@ -65,7 +67,7 @@ const MentorDashboard = () => {
       );
     } catch {
       console.error("Failed to update request");
-      alert("Error updating request status.");
+      alert("❌ Error updating request status.");
     }
   };
 
@@ -95,7 +97,7 @@ const MentorDashboard = () => {
 
           {tab === "requests" && (
             <section className="mt-6">
-              <h2 className="text-xl font-semibold text-purple-700 mb-2">
+              <h2 className="text-xl font-semibold text-purple-700 mb-3">
                 Mentorship Requests
               </h2>
               {requests.length === 0 ? (
@@ -146,7 +148,7 @@ const MentorDashboard = () => {
 
           {tab === "sessions" && (
             <section className="mt-8">
-              <h2 className="text-xl font-semibold text-purple-700 mb-2">
+              <h2 className="text-xl font-semibold text-purple-700 mb-3">
                 Booked Sessions
               </h2>
               {sessions.length === 0 ? (
@@ -201,7 +203,7 @@ const MentorDashboard = () => {
 
           {tab === "feedback" && (
             <section className="mt-8">
-              <h2 className="text-xl font-semibold text-purple-700 mb-2">
+              <h2 className="text-xl font-semibold text-purple-700 mb-3">
                 Mentee Feedback
               </h2>
               {sessions.filter((s) => s.feedbackFromMentee).length === 0 ? (
@@ -225,6 +227,16 @@ const MentorDashboard = () => {
               )}
             </section>
           )}
+
+          {/* 🔙 Back to Home */}
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => navigate("/")}
+              className="text-sm text-purple-600 underline hover:text-purple-800"
+            >
+              ← Back to Home
+            </button>
+          </div>
         </div>
       </div>
     </div>
