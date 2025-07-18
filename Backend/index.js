@@ -11,8 +11,8 @@ import mentorshipRoutes from "./routes/mentorshipRoutes.js";
 import availabilityRoutes from "./routes/availabilityRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
-import errorHandler from "./middleware/errorHandler.js";
 import mentorRoutes from "./routes/mentorRoute.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -52,14 +52,27 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// API Routes
+// ✅ API Routes
 app.use("/api/auth", AuthRoutes);
+console.log("🔐 AuthRoutes mounted at /api/auth");
+
 app.use("/api/profile", profileRoutes);
+console.log("👤 ProfileRoutes mounted at /api/profile");
+
 app.use("/api/requests", mentorshipRoutes);
+console.log("🤝 MentorshipRoutes mounted at /api/requests");
+
 app.use("/api/availability", availabilityRoutes);
+console.log("🕒 AvailabilityRoutes mounted at /api/availability");
+
 app.use("/api/sessions", sessionRoutes);
+console.log("📅 SessionRoutes mounted at /api/sessions");
+
 app.use("/api/admin", adminRoutes);
+console.log("🛠 AdminRoutes mounted at /api/admin");
+
 app.use("/api/mentor", mentorRoutes);
+console.log("🎓 MentorRoutes mounted at /api/mentor");
 
 // Welcome Route
 app.get("/", (req, res) => {
@@ -77,6 +90,6 @@ app.use(errorHandler);
 // Connect DB and Start Server
 connectDb();
 app.listen(port, () => {
-  console.log("Triggering redeploy for profile route");
-  console.log(`Server running on port ${port}`);
+  console.log("🚀 Triggering redeploy for profile route");
+  console.log(`✅ Server running on port ${port}`);
 });

@@ -16,7 +16,7 @@ const mentorSchema = new mongoose.Schema({
   profileStatus: {
     type: String,
     enum: ["Pending", "Available", "Unavailable"],
-    default: "Pending",
+    default: "Available", // ✅ Changed from Pending to Available
   },
 });
 

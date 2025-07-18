@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "../services/axios";
-import { AxiosError } from "axios"; 
+import { AxiosError } from "axios";
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +14,7 @@ const EditProfile = () => {
     bio: "",
     skills: "",
     goals: "",
+    available: true,
   });
 
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,7 @@ const EditProfile = () => {
           bio: profile.bio || "",
           skills: profile.skills?.join(", ") || "",
           goals: profile.goals?.join(", ") || "",
+          available: profile.available !== undefined ? profile.available : true,
         });
 
         setLoading(false);
@@ -45,10 +47,15 @@ const EditProfile = () => {
     fetchProfile();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const target = e.target as HTMLInputElement;
+    const { name, type, value, checked } = target;
+
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -64,13 +71,16 @@ const EditProfile = () => {
         bio: form.bio,
         skills: form.skills.split(",").map((s) => s.trim()),
         goals: form.goals.split(",").map((g) => g.trim()),
+        available: form.available,
       });
 
       setSuccess("Profile updated successfully!");
       navigate(
-        user?.role === "mentor" ? "/mentor/dashboard" :
-        user?.role === "mentee" ? "/mentee/dashboard" :
-        "/"
+        user?.role === "mentor"
+          ? "/mentor/dashboard"
+          : user?.role === "mentee"
+          ? "/mentee/dashboard"
+          : "/"
       );
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
@@ -125,6 +135,18 @@ const EditProfile = () => {
           onChange={handleChange}
           className="w-full p-2 border rounded"
         />
+
+        {/* Availability Toggle */}
+        <label className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            name="available"
+            checked={form.available}
+            onChange={handleChange}
+          />
+          <span className="text-sm">Available for mentorship</span>
+        </label>
+
         {error && <p className="text-red-500 text-sm">{error}</p>}
         {success && <p className="text-green-600 text-sm">{success}</p>}
         <button

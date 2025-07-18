@@ -76,3 +76,23 @@ export const getAllMentors = async (req, res) => {
     res.status(500).json({ message: "Error retrieving mentors" });
   }
 };
+
+// ✅ TOGGLE availability
+export const toggleMentorAvailability = async (req, res) => {
+  try {
+    const { userId, newStatus } = req.body;
+
+    const mentor = await Mentor.findOne({ userId });
+    if (!mentor) {
+      return res.status(404).json({ message: "Mentor not found" });
+    }
+
+    mentor.profileStatus = newStatus;
+    await mentor.save();
+
+    res.status(200).json({ message: "Availability updated", profileStatus: mentor.profileStatus });
+  } catch (err) {
+    console.error("❌ Error updating availability:", err);
+    res.status(500).json({ message: "Error updating availability" });
+  }
+};

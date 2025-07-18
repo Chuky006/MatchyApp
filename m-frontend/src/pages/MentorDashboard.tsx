@@ -20,32 +20,68 @@ interface Session {
   feedbackFromMentor?: string;
 }
 
+interface User {
+  _id: string;
+  name: string;
+  role: string;
+  email: string;
+}
+
 const MentorDashboard = () => {
-  const { user } = useAuth();
+  const { user } = useAuth() as { user: User | null };
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [requests, setRequests] = useState<Request[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
   const [tab, setTab] = useState<"requests" | "sessions" | "feedback">("requests");
+  const [availability, setAvailability] = useState<"Available" | "Unavailable">("Available");
 
   useMentorProfileCheck();
 
   useEffect(() => {
-    if (user?.role === "mentor") {
-      axios
-        .get("/requests/received")
-        .then((res) => setRequests(res.data.requests))
-        .catch(() => console.error("Failed to load requests"));
+    const fetchMentorProfile = async () => {
+      try {
+        const res = await axios.get(`/mentor/${user?._id}`);
+        setAvailability(res.data.profileStatus || "Available");
+      } catch (err) {
+        console.error("Failed to fetch mentor profile", err);
+      }
+    };
 
-      axios
-        .get("/sessions")
-        .then((res) => setSessions(res.data.sessions))
-        .catch(() => console.error("Failed to load sessions"));
+    const fetchData = async () => {
+      if (user?.role === "mentor") {
+        try {
+          const [reqRes, sessRes] = await Promise.all([
+            axios.get("/requests/received"),
+            axios.get("/sessions"),
+          ]);
+          setRequests(reqRes.data.requests);
+          setSessions(sessRes.data.sessions);
+        } catch (err) {
+          console.error("Error loading dashboard data", err);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
 
-      setLoading(false);
-    }
+    fetchMentorProfile();
+    fetchData();
   }, [user]);
+
+  const toggleAvailability = async () => {
+    const newStatus = availability === "Available" ? "Unavailable" : "Available";
+    try {
+      const res = await axios.put("/mentor/status", {
+        userId: user?._id,
+        newStatus,
+      });
+      setAvailability(res.data.profileStatus);
+    } catch {
+      alert("❌ Failed to update availability.");
+    }
+  };
 
   const handleFeedbackSubmit = async (sessionId: string) => {
     try {
@@ -74,13 +110,10 @@ const MentorDashboard = () => {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div
-      className="min-h-screen flex bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1950&q=80')",
-      }}
-    >
+    <div className="min-h-screen flex bg-cover bg-center" style={{
+      backgroundImage:
+        "url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1950&q=80')",
+    }}>
       <Sidebar
         links={[
           { label: "Requests", path: "#", onClick: () => setTab("requests") },
@@ -95,6 +128,26 @@ const MentorDashboard = () => {
             Welcome, Mentor {user?.name}
           </h1>
 
+          {/* Toggle */}
+          <div className="mb-6 flex justify-center items-center gap-4">
+            <span className="text-gray-700 font-medium">Status:</span>
+            <span className={`px-3 py-1 rounded-full text-white ${availability === "Available" ? "bg-green-600" : "bg-red-600"}`}>
+              {availability}
+            </span>
+
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={availability === "Available"}
+                onChange={toggleAvailability}
+              />
+              <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-green-500 rounded-full peer peer-checked:bg-green-500 transition-all"></div>
+              <div className="absolute left-1 top-0.5 bg-white w-5 h-5 rounded-full transition-all peer-checked:translate-x-full"></div>
+            </label>
+          </div>
+
+          {/* Tabs */}
           {tab === "requests" && (
             <section className="mt-6">
               <h2 className="text-xl font-semibold text-purple-700 mb-3">
@@ -105,36 +158,25 @@ const MentorDashboard = () => {
               ) : (
                 <ul className="space-y-2">
                   {requests.map((req) => (
-                    <li
-                      key={req._id}
-                      className="border p-3 rounded shadow-sm bg-white flex justify-between items-center"
-                    >
+                    <li key={req._id} className="border p-3 rounded shadow-sm bg-white flex justify-between items-center">
                       <div>
                         Mentee: <strong>{req.mentee.name}</strong> - Status:{" "}
-                        <span
-                          className={`px-2 py-1 rounded text-white ${
-                            req.status === "pending"
-                              ? "bg-yellow-500"
-                              : req.status === "accepted"
+                        <span className={`px-2 py-1 rounded text-white ${
+                          req.status === "pending"
+                            ? "bg-yellow-500"
+                            : req.status === "accepted"
                               ? "bg-green-600"
                               : "bg-gray-400"
-                          }`}
-                        >
+                        }`}>
                           {req.status}
                         </span>
                       </div>
                       {req.status === "pending" && (
                         <div className="space-x-2">
-                          <button
-                            onClick={() => updateRequestStatus(req._id, "accepted")}
-                            className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                          >
+                          <button onClick={() => updateRequestStatus(req._id, "accepted")} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
                             Accept
                           </button>
-                          <button
-                            onClick={() => updateRequestStatus(req._id, "declined")}
-                            className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-                          >
+                          <button onClick={() => updateRequestStatus(req._id, "declined")} className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
                             Decline
                           </button>
                         </div>
@@ -148,22 +190,16 @@ const MentorDashboard = () => {
 
           {tab === "sessions" && (
             <section className="mt-8">
-              <h2 className="text-xl font-semibold text-purple-700 mb-3">
-                Booked Sessions
-              </h2>
+              <h2 className="text-xl font-semibold text-purple-700 mb-3">Booked Sessions</h2>
               {sessions.length === 0 ? (
                 <p className="text-gray-600">No sessions booked yet.</p>
               ) : (
                 <ul className="space-y-4">
                   {sessions.map((session) => (
-                    <li
-                      key={session._id}
-                      className="border p-4 rounded shadow-sm bg-white"
-                    >
+                    <li key={session._id} className="border p-4 rounded shadow-sm bg-white">
                       <div className="text-sm text-gray-800">
                         <strong>Mentee:</strong> {session.mentee.name} <br />
-                        <strong>Date:</strong>{" "}
-                        {new Date(session.scheduledDate).toLocaleString()}
+                        <strong>Date:</strong> {new Date(session.scheduledDate).toLocaleString()}
                       </div>
 
                       {!session.feedbackFromMentor && (
@@ -213,14 +249,9 @@ const MentorDashboard = () => {
                   {sessions
                     .filter((s) => s.feedbackFromMentee)
                     .map((s) => (
-                      <li
-                        key={s._id}
-                        className="border p-3 rounded shadow-sm bg-white"
-                      >
+                      <li key={s._id} className="border p-3 rounded shadow-sm bg-white">
                         <strong>{s.mentee.name}</strong>:{" "}
-                        <span className="italic text-gray-700">
-                          {s.feedbackFromMentee}
-                        </span>
+                        <span className="italic text-gray-700">{s.feedbackFromMentee}</span>
                       </li>
                     ))}
                 </ul>
@@ -228,12 +259,8 @@ const MentorDashboard = () => {
             </section>
           )}
 
-          {/* 🔙 Back to Home */}
           <div className="mt-8 flex justify-center">
-            <button
-              onClick={() => navigate("/")}
-              className="text-sm text-purple-600 underline hover:text-purple-800"
-            >
+            <button onClick={() => navigate("/")} className="text-sm text-purple-600 underline hover:text-purple-800">
               ← Back to Home
             </button>
           </div>

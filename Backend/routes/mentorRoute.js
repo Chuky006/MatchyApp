@@ -2,20 +2,23 @@ import express from "express";
 import {
   createMentor,
   getMentorById,
-  getAllMentors, // ✅ NEW
+  getAllMentors,
+  toggleMentorAvailability,
 } from "../controller/mentorController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const mentorRouter = express.Router();
 
-// ✅ For mentees to fetch list of mentors
-// GET /api/mentor/mentors
+// ✅ Get all mentors (for mentees)
 mentorRouter.get("/mentors", authMiddleware, getAllMentors);
 
-// POST /api/mentor/add
+// ✅ Toggle availability (for mentors)
+mentorRouter.put("/status", authMiddleware, toggleMentorAvailability);
+
+// ✅ Add a new mentor (admin or manually)
 mentorRouter.post("/add", createMentor);
 
-// GET /api/mentor/:id (used for useProfileCheck)
+// ✅ Get mentor by ID (used in useProfileCheck)
 mentorRouter.get("/:id", authMiddleware, getMentorById);
 
 export default mentorRouter;

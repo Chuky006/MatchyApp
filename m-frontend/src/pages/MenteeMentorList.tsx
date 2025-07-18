@@ -22,7 +22,7 @@ const MenteeMentorList = () => {
   useEffect(() => {
     const fetchMentors = async () => {
       try {
-        const res = await axiosInstance.get("/mentor/mentors"); // ✅ Confirm this matches your backend route
+        const res = await axiosInstance.get("/mentor/mentors");
         setMentors(res.data.mentors);
       } catch (err) {
         const error = err as AxiosError;
@@ -34,7 +34,7 @@ const MenteeMentorList = () => {
     fetchMentors();
   }, []);
 
-  const handleRequest = async (mentorId: string, profileStatus: string) => {
+  const handleRequest = async (mentorId: string, profileStatus: Mentor["profileStatus"]) => {
     if (profileStatus !== "Available") {
       alert("This mentor is currently unavailable.");
       return;
