@@ -43,7 +43,7 @@ const getAllSessions = async (req, res) => {
   }
 };
 
-//POST /api/admin/assign - Assign mentor to mentee manually
+//Assign mentor to mentee manually
 const assignMentorToMentee = async (req, res) => {
   try {
     const { mentorId, menteeId, message } = req.body;

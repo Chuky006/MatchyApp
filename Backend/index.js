@@ -19,7 +19,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Allowed Origins for CORS
+//CORS
 const allowedOrigins = [
   "https://matchy-app.vercel.app",
   "https://matchy-koadan134-ochukos-projects-dc4d2fef.vercel.app",
@@ -52,7 +52,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// ✅ API Routes
+//API Routes
 app.use("/api/auth", AuthRoutes);
 console.log("🔐 AuthRoutes mounted at /api/auth");
 
@@ -74,20 +74,18 @@ console.log("🛠 AdminRoutes mounted at /api/admin");
 app.use("/api/mentor", mentorRoutes);
 console.log("🎓 MentorRoutes mounted at /api/mentor");
 
-// Welcome Route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to Matchy Backend!" });
 });
 
-// 404 Catch-all
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// Global Error Handler
+//Global Error Handler
 app.use(errorHandler);
 
-// Connect DB and Start Server
+//Connect DB and Start Server
 connectDb();
 app.listen(port, () => {
   console.log("🚀 Triggering redeploy for profile route");

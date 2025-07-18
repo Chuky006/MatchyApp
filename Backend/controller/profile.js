@@ -1,8 +1,8 @@
 import AuthModel from "../models/authSchema.js";
-import Mentor from "../models/mentorSchema.js"; // ✅ ADDED
+import Mentor from "../models/mentorSchema.js";
 import jwt from "jsonwebtoken";
 
-// ✅ FIXED: Get mentor list (for mentee discovery) – only Available mentors
+//Get mentor list (for mentee discovery) – only Available mentors
 const getMentorProfiles = async (req, res) => {
   try {
     const mentors = await Mentor.find({
@@ -20,7 +20,7 @@ const getMentorProfiles = async (req, res) => {
   }
 };
 
-// Get user details (Admin)
+//Get user details (Admin)
 const users = async (req, res) => {
   try {
     const { id } = req.params;
@@ -37,7 +37,7 @@ const users = async (req, res) => {
   }
 };
 
-// Edit user profile (Admin)
+//Edit user profile (Admin)
 const editProfile = async (req, res) => {
   try {
     const { id } = req.params;
@@ -65,7 +65,7 @@ const editProfile = async (req, res) => {
   }
 };
 
-// Toggle mentor availability
+//Toggle mentor availability
 const toggleAvailability = async (req, res) => {
   try {
     const mentorId = req.user.id;

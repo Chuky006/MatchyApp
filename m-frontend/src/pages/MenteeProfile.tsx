@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,26 @@ const MenteeProfile = () => {
   const [goals, setGoals] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get("/api/profile/me", { withCredentials: true });
+        const profile = res.data.profile;
+
+        setBio(profile.bio || "");
+        setGoals((profile.goals || []).join(", "));
+      } catch (err) {
+        const error = err as AxiosError<{ message: string }>;
+        setError(error?.response?.data?.message || "Could not fetch profile");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,9 +59,22 @@ const MenteeProfile = () => {
     return <p className="text-center mt-8 text-red-500">Unauthorized</p>;
   }
 
+  if (loading) {
+    return <p className="text-center mt-8">Loading profile...</p>;
+  }
+
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
-      <h1 className="text-2xl font-bold mb-6 text-center">Complete Your Mentee Profile</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold text-purple-700">Complete Your Mentee Profile</h1>
+        <button
+          onClick={() => navigate("/profile/edit")}
+          className="text-sm text-purple-600 underline hover:text-purple-800 transition"
+        >
+          View/Edit Profile
+        </button>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <textarea
           placeholder="Bio"
@@ -61,7 +94,7 @@ const MenteeProfile = () => {
         {success && <p className="text-green-500 text-sm">{success}</p>}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition"
         >
           Submit Profile
         </button>

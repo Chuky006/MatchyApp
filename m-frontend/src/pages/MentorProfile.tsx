@@ -18,8 +18,8 @@ const MentorProfile = () => {
     e.preventDefault();
 
     try {
-      await axiosInstance.post("/mentor/add", {
-        userId: user?.id, //link mentor to Auth user
+      await axiosInstance.post("/profile/add", {
+        userId: user?.id,
         name: user?.name,
         email: user?.email,
         bio,
@@ -43,14 +43,16 @@ const MentorProfile = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
-      <h1 className="text-2xl font-bold mb-6 text-center">Complete Your Mentor Profile</h1>
+    <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow-lg border border-purple-300">
+      <h1 className="text-3xl font-bold mb-6 text-center text-purple-700">
+        Complete Your Mentor Profile
+      </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <textarea
           placeholder="Bio"
           value={bio}
           onChange={(e) => setBio(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border border-purple-400 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
           rows={3}
           required
         />
@@ -59,7 +61,7 @@ const MentorProfile = () => {
           placeholder="Skills (comma-separated)"
           value={skills}
           onChange={(e) => setSkills(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border border-purple-400 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
           required
         />
         <input
@@ -67,14 +69,14 @@ const MentorProfile = () => {
           placeholder="Years of experience"
           value={experience}
           onChange={(e) => setExperience(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border border-purple-400 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
           required
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        {success && <p className="text-green-500 text-sm">{success}</p>}
+        {success && <p className="text-green-600 text-sm">{success}</p>}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="w-full bg-purple-700 text-white py-2 rounded hover:bg-purple-800 transition"
         >
           Submit Profile
         </button>
@@ -84,4 +86,5 @@ const MentorProfile = () => {
 };
 
 export default MentorProfile;
+
 

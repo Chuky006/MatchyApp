@@ -13,7 +13,7 @@ export const useMenteeProfileCheck = () => {
       try {
         const res = await axiosInstance.get("/profile/me");
         const profile = res.data.profile;
-        console.log("📥 Mentee profile loaded", profile);
+        console.log("Mentee profile loaded", profile);
         //No redirect logic
       } catch (err) {
         console.error("❌ Mentee profile check failed", err);
@@ -26,7 +26,7 @@ export const useMenteeProfileCheck = () => {
   }, [user, navigate]);
 };
 
-//Disabled mentor profile check
+//Disabled mentor profile check?
 export const useMentorProfileCheck = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -36,8 +36,8 @@ export const useMentorProfileCheck = () => {
       try {
         const res = await axiosInstance.get(`/mentor/${user?.id}`);
         const profile = res.data.profile;
-        console.log("📥 Mentor profile loaded", profile);
-        // 🚫 No redirect logic
+        console.log("Mentor profile loaded", profile);
+
       } catch (err) {
         console.error("❌ Mentor profile check failed", err);
       }

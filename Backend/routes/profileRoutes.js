@@ -14,22 +14,22 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const profileRoutes = express.Router();
 
-//Route to add mentor (used by admin or internal form)
+//Route to add mentor 
 profileRoutes.post("/add", createMentor);
 
-// Authenticated user fetches own profile
+//Authenticated user fetches own profile
 profileRoutes.get("/me", authMiddleware, getMyProfile);
 
-// Authenticated user updates their own profile
+//Authenticated user updates their own profile
 profileRoutes.put("/me", authMiddleware, updateMyProfile);
 
-// Admin fetches any user's profile by ID
+//Admin fetches any user's profile by ID
 profileRoutes.get("/users/:id", authMiddleware, users);
 
-// Admin edits any user's profile by ID
+//Admin edits any user's profile by ID
 profileRoutes.put("/editProfile/:id", authMiddleware, editProfile);
 
-// Get all mentor profiles (for mentees to view)
+//Get all mentor profiles (for mentees to view)
 profileRoutes.get("/mentors", authMiddleware, getMentorProfiles);
 
 //Toggle mentor availability (mentor dashboard button)

@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import Mentor from "../models/mentorSchema.js";
 
-// ✅ CREATE a new mentor profile
+//CREATE a new mentor profile
 export const createMentor = async (req, res) => {
   try {
     const {
@@ -41,7 +41,7 @@ export const createMentor = async (req, res) => {
   }
 };
 
-// ✅ GET mentor profile by userId
+//GET mentor profile by userId
 export const getMentorById = async (req, res) => {
   try {
     const mentor = await Mentor.findOne({
@@ -59,7 +59,7 @@ export const getMentorById = async (req, res) => {
   }
 };
 
-// ✅ GET all mentors (used by mentees to browse)
+//GET all mentors (used by mentees to browse)
 export const getAllMentors = async (req, res) => {
   try {
     const mentors = await Mentor.find({ profileStatus: "Available" }).select(
@@ -77,7 +77,7 @@ export const getAllMentors = async (req, res) => {
   }
 };
 
-// ✅ TOGGLE availability
+//TOGGLE availability
 export const toggleMentorAvailability = async (req, res) => {
   try {
     const { userId, newStatus } = req.body;

@@ -5,7 +5,6 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const AuthRoutes = express.Router();
 
-//user registration route
 AuthRoutes.post("/register", register)
 AuthRoutes.post("/login", login)
 AuthRoutes.post("/logout", logout)

@@ -16,12 +16,12 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* 🏠 Public Routes */}
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* 🔐 Admin */}
+        {/* Admin */}
         <Route
           path="/admin/dashboard"
           element={
@@ -31,7 +31,7 @@ const App = () => {
           }
         />
 
-        {/* 🔐 Mentor */}
+        {/* Mentor */}
         <Route
           path="/mentor/dashboard"
           element={
@@ -49,7 +49,7 @@ const App = () => {
           }
         />
 
-        {/* 🔐 Mentee */}
+        {/* Mentee */}
         <Route
           path="/mentee/dashboard"
           element={
@@ -83,7 +83,7 @@ const App = () => {
           }
         />
 
-        {/* 🔐 Shared: All roles */}
+        {/* Shared: All roles */}
         <Route
           path="/profile/edit"
           element={

@@ -79,7 +79,7 @@ const MentorDashboard = () => {
       });
       setAvailability(res.data.profileStatus);
     } catch {
-      alert("❌ Failed to update availability.");
+      alert("Failed to update availability.");
     }
   };
 
@@ -88,10 +88,9 @@ const MentorDashboard = () => {
       await axios.put(`/sessions/${sessionId}/mentor-feedback`, {
         feedback: feedbackMap[sessionId],
       });
-      alert("✅ Feedback submitted!");
       location.reload();
     } catch {
-      alert("❌ Failed to submit feedback.");
+      alert("Failed to submit feedback.");
     }
   };
 
@@ -103,17 +102,14 @@ const MentorDashboard = () => {
       );
     } catch {
       console.error("Failed to update request");
-      alert("❌ Error updating request status.");
+      alert("Error updating request status.");
     }
   };
 
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="min-h-screen flex bg-cover bg-center" style={{
-      backgroundImage:
-        "url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1950&q=80')",
-    }}>
+    <div className="min-h-screen flex bg-gray-100">
       <Sidebar
         links={[
           { label: "Requests", path: "#", onClick: () => setTab("requests") },
@@ -123,18 +119,33 @@ const MentorDashboard = () => {
       />
       <div className="flex-1 ml-64">
         <Topbar />
-        <div className="max-w-5xl mx-auto mt-10 p-6 bg-white bg-opacity-95 shadow-md rounded-lg">
+        <div className="max-w-5xl mx-auto mt-12 p-8 bg-white shadow rounded-lg">
           <h1 className="text-3xl font-bold text-purple-700 text-center mb-6">
             Welcome, Mentor {user?.name}
           </h1>
 
-          {/* Toggle */}
+          {/* Buttons */}
+          <div className="flex justify-center gap-4 mb-6">
+            <button
+              onClick={() => navigate("/mentor/profile")}
+              className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition"
+            >
+              View Profile
+            </button>
+            <button
+              onClick={() => navigate("/profile/edit")}
+              className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700 transition"
+            >
+              Edit Profile
+            </button>
+          </div>
+
+          {/* Availability */}
           <div className="mb-6 flex justify-center items-center gap-4">
             <span className="text-gray-700 font-medium">Status:</span>
-            <span className={`px-3 py-1 rounded-full text-white ${availability === "Available" ? "bg-green-600" : "bg-red-600"}`}>
+            <span className={`px-3 py-1 rounded-full text-white bg-purple-600`}>
               {availability}
             </span>
-
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
@@ -142,7 +153,7 @@ const MentorDashboard = () => {
                 checked={availability === "Available"}
                 onChange={toggleAvailability}
               />
-              <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-green-500 rounded-full peer peer-checked:bg-green-500 transition-all"></div>
+              <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-purple-500 transition-all"></div>
               <div className="absolute left-1 top-0.5 bg-white w-5 h-5 rounded-full transition-all peer-checked:translate-x-full"></div>
             </label>
           </div>
@@ -150,33 +161,34 @@ const MentorDashboard = () => {
           {/* Tabs */}
           {tab === "requests" && (
             <section className="mt-6">
-              <h2 className="text-xl font-semibold text-purple-700 mb-3">
-                Mentorship Requests
-              </h2>
+              <h2 className="text-xl font-semibold text-purple-700 mb-3">Mentorship Requests</h2>
               {requests.length === 0 ? (
-                <p className="text-gray-600">No requests received yet.</p>
+                <p className="text-gray-500 text-center">No requests received yet.</p>
               ) : (
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {requests.map((req) => (
-                    <li key={req._id} className="border p-3 rounded shadow-sm bg-white flex justify-between items-center">
+                    <li
+                      key={req._id}
+                      className="p-4 bg-gray-50 border rounded flex justify-between items-center"
+                    >
                       <div>
-                        Mentee: <strong>{req.mentee.name}</strong> - Status:{" "}
-                        <span className={`px-2 py-1 rounded text-white ${
-                          req.status === "pending"
-                            ? "bg-yellow-500"
-                            : req.status === "accepted"
-                              ? "bg-green-600"
-                              : "bg-gray-400"
-                        }`}>
+                        <strong>{req.mentee.name}</strong> – Status:{" "}
+                        <span className="text-sm text-purple-700 font-semibold capitalize">
                           {req.status}
                         </span>
                       </div>
                       {req.status === "pending" && (
                         <div className="space-x-2">
-                          <button onClick={() => updateRequestStatus(req._id, "accepted")} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
+                          <button
+                            onClick={() => updateRequestStatus(req._id, "accepted")}
+                            className="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700"
+                          >
                             Accept
                           </button>
-                          <button onClick={() => updateRequestStatus(req._id, "declined")} className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+                          <button
+                            onClick={() => updateRequestStatus(req._id, "declined")}
+                            className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
+                          >
                             Decline
                           </button>
                         </div>
@@ -192,14 +204,15 @@ const MentorDashboard = () => {
             <section className="mt-8">
               <h2 className="text-xl font-semibold text-purple-700 mb-3">Booked Sessions</h2>
               {sessions.length === 0 ? (
-                <p className="text-gray-600">No sessions booked yet.</p>
+                <p className="text-gray-500 text-center">No sessions booked yet.</p>
               ) : (
                 <ul className="space-y-4">
                   {sessions.map((session) => (
-                    <li key={session._id} className="border p-4 rounded shadow-sm bg-white">
+                    <li key={session._id} className="p-4 bg-gray-50 border rounded">
                       <div className="text-sm text-gray-800">
                         <strong>Mentee:</strong> {session.mentee.name} <br />
-                        <strong>Date:</strong> {new Date(session.scheduledDate).toLocaleString()}
+                        <strong>Date:</strong>{" "}
+                        {new Date(session.scheduledDate).toLocaleString()}
                       </div>
 
                       {!session.feedbackFromMentor && (
@@ -208,10 +221,9 @@ const MentorDashboard = () => {
                             e.preventDefault();
                             handleFeedbackSubmit(session._id);
                           }}
-                          className="mt-2 space-y-2"
+                          className="mt-3 flex flex-col gap-2"
                         >
-                          <input
-                            name="feedback"
+                          <textarea
                             placeholder="Write feedback..."
                             className="w-full border rounded p-2"
                             value={feedbackMap[session._id] || ""}
@@ -224,7 +236,7 @@ const MentorDashboard = () => {
                           />
                           <button
                             type="submit"
-                            className="bg-purple-700 text-white px-4 py-1 rounded hover:bg-purple-800 transition"
+                            className="self-end bg-purple-700 text-white px-4 py-1 rounded hover:bg-purple-800 transition"
                           >
                             Submit Feedback
                           </button>
@@ -239,19 +251,19 @@ const MentorDashboard = () => {
 
           {tab === "feedback" && (
             <section className="mt-8">
-              <h2 className="text-xl font-semibold text-purple-700 mb-3">
-                Mentee Feedback
-              </h2>
+              <h2 className="text-xl font-semibold text-purple-700 mb-3">Mentee Feedback</h2>
               {sessions.filter((s) => s.feedbackFromMentee).length === 0 ? (
-                <p className="text-gray-600">No feedback received yet.</p>
+                <p className="text-gray-500 text-center">No feedback received yet.</p>
               ) : (
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {sessions
                     .filter((s) => s.feedbackFromMentee)
                     .map((s) => (
-                      <li key={s._id} className="border p-3 rounded shadow-sm bg-white">
+                      <li key={s._id} className="p-4 bg-gray-50 border rounded">
                         <strong>{s.mentee.name}</strong>:{" "}
-                        <span className="italic text-gray-700">{s.feedbackFromMentee}</span>
+                        <span className="italic text-gray-700">
+                          {s.feedbackFromMentee}
+                        </span>
                       </li>
                     ))}
                 </ul>
@@ -259,8 +271,11 @@ const MentorDashboard = () => {
             </section>
           )}
 
-          <div className="mt-8 flex justify-center">
-            <button onClick={() => navigate("/")} className="text-sm text-purple-600 underline hover:text-purple-800">
+          <div className="mt-10 flex justify-center">
+            <button
+              onClick={() => navigate("/")}
+              className="text-sm text-purple-600 underline hover:text-purple-800"
+            >
               ← Back to Home
             </button>
           </div>

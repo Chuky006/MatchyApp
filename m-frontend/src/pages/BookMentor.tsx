@@ -13,7 +13,7 @@ interface AvailabilitySlot {
 interface Session {
   _id: string;
   date: string;
-  time: string; // format: "HH:mm-HH:mm"
+  time: string; //format: "HH:mm-HH:mm"
   mentorId: string;
   menteeId: string;
 }
